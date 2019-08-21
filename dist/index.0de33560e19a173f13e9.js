@@ -230,25 +230,26 @@ console.log(returnArgumentsArray(1, 2, 3, 4, 'hello'));
 
 console.log('Задание 6:');
 
-var concat = arr => {
+var concat = (arr, str) => {
   //  let a;
   //  for(var i=0;i<arr.length;i++)
   //   a = arr.join('');
-  console.log(arr);
+  //  console.log(str);
   return arr[0] + arr[1];
 };
 
-function bindFunction(fn) {
-  var arr = [];
+function bindFunction(fn, ...args) {
+  // var arr = [];
+  // for(let i = 1; i < arguments.length; i++){
+  //   arr.push(arguments[i]);
+  // }
+  // console.log(args);
+  return () => {
+    return fn(args, args.join(''));
+  };
+} // debugger;
 
-  for (let i = 1; i < arguments.length; i++) {
-    arr.push(arguments[i]);
-  }
 
-  return fn(arr);
-}
-
-debugger;
 var aa = bindFunction(concat, 2, 4);
 console.log(aa()); // var concat = (a,b)=> a+b;
 // function bindFunction(fn,a,b) {
@@ -264,4 +265,4 @@ console.log(aa()); // var concat = (a,b)=> a+b;
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.af11f130568a9382ff72.js.map
+//# sourceMappingURL=index.0de33560e19a173f13e9.js.map
