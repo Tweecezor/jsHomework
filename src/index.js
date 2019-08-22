@@ -131,7 +131,8 @@ var concat = (a,b)=>  {
 
 function bindFunction(fn,...args) {
 
-  return ()=>fn.apply(this,args);
+  // return ()=>fn.apply(this,args);
+  return ()=>fn(...args)
 }
 debugger;
 var aa = bindFunction(concat,2,4,5);

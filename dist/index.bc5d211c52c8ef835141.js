@@ -232,52 +232,21 @@ console.log('Задание 6:');
 
 var concat = (a, b) => {
   console.log(a);
-  console.log(b); //  let a;
-  //  for(var i=0;i<arr.length;i++)
-  //   a = arr.join('');
-
+  console.log(b);
   return a + b;
 };
 
 function bindFunction(fn, ...args) {
-  // var arr = [];
-  // for(let i = 1; i < arguments.length; i++){
-  //   arr.push(arguments[i]);
-  // }
-  // console.log(args);
-  return fn.apply(this, args);
+  // return ()=>fn.apply(this,args);
+  return () => fn(args);
 }
 
 debugger;
-var aa = bindFunction;
-console.log(aa(concat, 2, 4, 5)); // console.log('learn js ')
-// function sum() {
-//   return [].reduce.call(arguments, function(a, b) {
-//     return a + b;
-//   });
-// }
-// function mul() {
-//   return [].reduce.call(arguments, function(a, b) {
-//     return a * b;
-//   });
-// }
-// function applyAll(func,...args) {
-//     return func.apply(this, args);
-//   }
-// // debugger;
-// console.log( applyAll(sum, 1, 2, 3) ); // 6
-// var concat = (a,b)=> a+b;
-// function bindFunction(fn,a,b) {
-//   return ()=>{
-//     return fn(a,b);
-//   }
-// }
-// var aa = bindFunction(concat,'2','4');
-// console.log(aa());
-
+var aa = bindFunction(concat, 2, 4, 5);
+console.log(aa());
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.0c5f77222467a043f5b1.js.map
+//# sourceMappingURL=index.bc5d211c52c8ef835141.js.map
