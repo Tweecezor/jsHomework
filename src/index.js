@@ -12,14 +12,10 @@
 
  Другими словами: функция должна возвращать в неизменном виде то, что поступает ей на вход
  */
-console.log('Задание 1:')
+
 function returnFirstArgument(arg) {
-	return arg
+    return arg;
 }
-
-
-console.log(returnFirstArgument(10));
-console.log(returnFirstArgument('hey'));
 /*
  Задание 2:
 
@@ -34,14 +30,9 @@ console.log(returnFirstArgument('hey'));
  Пример:
    sumWithDefaults(10) вернет 110
  */
-
-console.log('Задание 2:')
-
 function sumWithDefaults(a, b = 100) {
-  return a + b;
+    return a + b;
 }
-console.log(sumWithDefaults(5));
-console.log(sumWithDefaults(5,10));
 
 /*
  Задание 3:
@@ -52,11 +43,9 @@ console.log(sumWithDefaults(5,10));
    returnFnResult(() => 'привет') вернет 'привет'
  */
 
-console.log('Задание 3:')
 function returnFnResult(fn) {
-	return fn()
+    return fn();
 }
-console.log(returnFnResult(() => 'привет'));
 
 /*
  Задание 4:
@@ -72,19 +61,14 @@ console.log(returnFnResult(() => 'привет'));
    console.log(f()); // выведет 13
  */
 
-
-console.log('Задание 4:')
 function returnCounter(number = 0) {
-  return ()=>{
-    return number+=1;
-  };
+    return ()=>{
+        return number+=1;
+    };
 }
 var f = returnCounter();
-console.log('one = '+ f());
-console.log(f());
-console.log(f());
-console.log(f());
 
+f();
 /*
  Задание 5 *:
 
@@ -95,15 +79,15 @@ console.log(f());
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 
-console.log('Задание 5:')
 function returnArgumentsArray() {
-  var arr = [];
-  for(let i = 0; i < arguments.length; i++){
-    arr.push(arguments[i]);
-  }
-  return arr;
+    var arr = [];
+
+    for ( let i = 0; i < arguments.length; i++ ) {
+        arr.push(arguments[i]);
+    }
+    
+    return arr;
 }
-console.log(returnArgumentsArray(1,2,3,4,'hello'));
 
 /*
  Задание 6 *:
@@ -120,23 +104,17 @@ console.log(returnArgumentsArray(1,2,3,4,'hello'));
 
    console.log(newSum()) выведет 6
  */
-
-console.log('Задание 6:')
-
-var concat = (a,b)=>  {
-  console.log(a);
-  console.log(b);
- return a+b;
+var concat = ( a, b )=> {
+    return a + b;
 }
 
-function bindFunction(fn,...args) {
-
-  // return ()=>fn.apply(this,args);
-  return ()=>fn(...args)
+function bindFunction( fn, ...args ) {
+    return ()=>fn( ...args )
 }
-debugger;
-var aa = bindFunction(concat,2,4,5);
-console.log(aa());
+
+var aa = bindFunction( concat, 2, 4, 5 );
+
+aa();
 
 export {
     returnFirstArgument,
