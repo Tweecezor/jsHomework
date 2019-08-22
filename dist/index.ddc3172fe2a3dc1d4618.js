@@ -115,14 +115,9 @@ __webpack_require__.r(__webpack_exports__);
 
  Другими словами: функция должна возвращать в неизменном виде то, что поступает ей на вход
  */
-console.log('Задание 1:');
-
 function returnFirstArgument(arg) {
   return arg;
 }
-
-console.log(returnFirstArgument(10));
-console.log(returnFirstArgument('hey'));
 /*
  Задание 2:
 
@@ -138,14 +133,11 @@ console.log(returnFirstArgument('hey'));
    sumWithDefaults(10) вернет 110
  */
 
-console.log('Задание 2:');
 
-function sumWithDefaults(a, b = 100) {
+function sumWithDefaults(a) {
+  var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
   return a + b;
 }
-
-console.log(sumWithDefaults(5));
-console.log(sumWithDefaults(5, 10));
 /*
  Задание 3:
 
@@ -155,13 +147,10 @@ console.log(sumWithDefaults(5, 10));
    returnFnResult(() => 'привет') вернет 'привет'
  */
 
-console.log('Задание 3:');
 
 function returnFnResult(fn) {
   return fn();
 }
-
-console.log(returnFnResult(() => 'привет'));
 /*
  Задание 4:
 
@@ -176,19 +165,16 @@ console.log(returnFnResult(() => 'привет'));
    console.log(f()); // выведет 13
  */
 
-console.log('Задание 4:');
 
-function returnCounter(number = 0) {
-  return () => {
+function returnCounter() {
+  var number = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  return function () {
     return number += 1;
   };
 }
 
 var f = returnCounter();
-console.log('one = ' + f());
-console.log(f());
-console.log(f());
-console.log(f());
+f();
 /*
  Задание 5 *:
 
@@ -199,19 +185,15 @@ console.log(f());
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 
-console.log('Задание 5:');
-
 function returnArgumentsArray() {
   var arr = [];
 
-  for (let i = 0; i < arguments.length; i++) {
+  for (var i = 0; i < arguments.length; i++) {
     arr.push(arguments[i]);
   }
 
   return arr;
 }
-
-console.log(returnArgumentsArray(1, 2, 3, 4, 'hello'));
 /*
  Задание 6 *:
 
@@ -228,25 +210,26 @@ console.log(returnArgumentsArray(1, 2, 3, 4, 'hello'));
    console.log(newSum()) выведет 6
  */
 
-console.log('Задание 6:');
 
-var concat = (a, b) => {
-  console.log(a);
-  console.log(b);
+var concat = function concat(a, b) {
   return a + b;
 };
 
-function bindFunction(fn, ...args) {
-  // return ()=>fn.apply(this,args);
-  return () => fn(args);
+function bindFunction(fn) {
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    return fn.apply(void 0, args);
+  };
 }
 
-debugger;
 var aa = bindFunction(concat, 2, 4, 5);
-console.log(aa());
+aa();
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.bc5d211c52c8ef835141.js.map
+//# sourceMappingURL=index.ddc3172fe2a3dc1d4618.js.map
