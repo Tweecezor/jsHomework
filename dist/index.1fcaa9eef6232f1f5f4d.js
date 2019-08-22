@@ -211,10 +211,6 @@ function returnArgumentsArray() {
  */
 
 
-var concat = function concat(a, b) {
-  return a + b;
-};
-
 function bindFunction(fn) {
   for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     args[_key - 1] = arguments[_key];
@@ -225,11 +221,9 @@ function bindFunction(fn) {
   };
 }
 
-var aa = bindFunction(concat, 2, 4, 5);
-aa();
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.ddc3172fe2a3dc1d4618.js.map
+//# sourceMappingURL=index.1fcaa9eef6232f1f5f4d.js.map

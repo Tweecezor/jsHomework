@@ -85,7 +85,7 @@ function returnArgumentsArray() {
     for ( let i = 0; i < arguments.length; i++ ) {
         arr.push(arguments[i]);
     }
-    
+
     return arr;
 }
 
@@ -104,17 +104,10 @@ function returnArgumentsArray() {
 
    console.log(newSum()) выведет 6
  */
-var concat = ( a, b )=> {
-    return a + b;
-}
 
 function bindFunction( fn, ...args ) {
     return ()=>fn( ...args )
 }
-
-var aa = bindFunction( concat, 2, 4, 5 );
-
-aa();
 
 export {
     returnFirstArgument,
