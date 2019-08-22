@@ -230,12 +230,13 @@ console.log(returnArgumentsArray(1, 2, 3, 4, 'hello'));
 
 console.log('Задание 6:');
 
-var concat = (arr, str) => {
-  //  let a;
+var concat = (a, b) => {
+  console.log(a);
+  console.log(b); //  let a;
   //  for(var i=0;i<arr.length;i++)
   //   a = arr.join('');
-  //  console.log(str);
-  return arr[0] + arr[1];
+
+  return a + b;
 };
 
 function bindFunction(fn, ...args) {
@@ -244,14 +245,28 @@ function bindFunction(fn, ...args) {
   //   arr.push(arguments[i]);
   // }
   // console.log(args);
-  return () => {
-    return fn(args, args.join(''));
-  };
-} // debugger;
+  return fn.apply(this, args);
+}
 
-
-var aa = bindFunction(concat, 2, 4);
-console.log(aa()); // var concat = (a,b)=> a+b;
+debugger;
+var aa = bindFunction;
+console.log(aa(concat, 2, 4, 5)); // console.log('learn js ')
+// function sum() {
+//   return [].reduce.call(arguments, function(a, b) {
+//     return a + b;
+//   });
+// }
+// function mul() {
+//   return [].reduce.call(arguments, function(a, b) {
+//     return a * b;
+//   });
+// }
+// function applyAll(func,...args) {
+//     return func.apply(this, args);
+//   }
+// // debugger;
+// console.log( applyAll(sum, 1, 2, 3) ); // 6
+// var concat = (a,b)=> a+b;
 // function bindFunction(fn,a,b) {
 //   return ()=>{
 //     return fn(a,b);
@@ -265,4 +280,4 @@ console.log(aa()); // var concat = (a,b)=> a+b;
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.0de33560e19a173f13e9.js.map
+//# sourceMappingURL=index.0c5f77222467a043f5b1.js.map

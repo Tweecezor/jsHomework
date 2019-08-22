@@ -123,39 +123,19 @@ console.log(returnArgumentsArray(1,2,3,4,'hello'));
 
 console.log('Задание 6:')
 
-var concat = (arr,str)=>  {
-//  let a;
-//  for(var i=0;i<arr.length;i++)
-//   a = arr.join('');
-//  console.log(str);
- return arr[0]+arr[1];
+var concat = (a,b)=>  {
+  console.log(a);
+  console.log(b);
+ return a+b;
 }
 
 function bindFunction(fn,...args) {
-  // var arr = [];
-  // for(let i = 1; i < arguments.length; i++){
-  //   arr.push(arguments[i]);
-  // }
-  
-  // console.log(args);
-  return ()=>{
-    return fn(args,args.join(''));
-  }
+
+  return ()=>fn.apply(this,args);
 }
-// debugger;
-var aa = bindFunction(concat,2,4);
+debugger;
+var aa = bindFunction(concat,2,4,5);
 console.log(aa());
-
-
-// var concat = (a,b)=> a+b;
-
-// function bindFunction(fn,a,b) {
-//   return ()=>{
-//     return fn(a,b);
-//   }
-// }
-// var aa = bindFunction(concat,'2','4');
-// console.log(aa());
 
 export {
     returnFirstArgument,
