@@ -37,19 +37,20 @@ function map ( array, fn ) {
 function reduce(array, fn, initial) {
     var rez;
 
+    var i;
+
     var prev;
 
     if (initial == undefined) {
-        prev = array[0];
-        for ( var i = 1; i<array.length; i++) {
-            prev = fn(prev, array[i], i, array);
-        }
+        prev = array[0]; 
+        i=1;
     } else {
         prev = initial;
-        for ( var j = 0; j<array.length; j++ ) {
-            prev = fn(prev, array[j], j, array);
-        }
-    }   
+        i=0;
+    }  
+    for ( ; i<array.length; i++) {
+        prev = fn(prev, array[i], i, array);
+    } 
     rez = prev;
 
     return rez;

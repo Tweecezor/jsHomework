@@ -141,20 +141,19 @@ function map(array, fn) {
 
 function reduce(array, fn, initial) {
   var rez;
+  var i;
   var prev;
 
   if (initial == undefined) {
     prev = array[0];
-
-    for (var i = 1; i < array.length; i++) {
-      prev = fn(prev, array[i], i, array);
-    }
+    i = 1;
   } else {
     prev = initial;
+    i = 0;
+  }
 
-    for (var j = 0; j < array.length; j++) {
-      prev = fn(prev, array[j], j, array);
-    }
+  for (; i < array.length; i++) {
+    prev = fn(prev, array[i], i, array);
   }
 
   rez = prev;
@@ -258,4 +257,4 @@ function createProxy(obj) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.7d437a3d5e32c88264e1.js.map
+//# sourceMappingURL=index.8b9dbca81a1dc02afc9a.js.map
