@@ -174,7 +174,9 @@ function upperProps(obj) {
   var arr = [];
 
   for (var key in obj) {
-    arr.push(key.toUpperCase());
+    if (obj.hasOwnProperty(key)) {
+      arr.push(key.toUpperCase());
+    }
   }
 
   return arr;
@@ -220,12 +222,11 @@ function slice(array) {
  Функция принимает объект и должна вернуть Proxy для этого объекта
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
+// let numbers= {
+//     one : '3',
+//     two : '2'
+//   };
 
-
-var numbers = {
-  one: '3',
-  two: '2'
-};
 
 function createProxy(obj) {
   for (var prop in obj) {
@@ -235,12 +236,11 @@ function createProxy(obj) {
   }
 
   return obj;
-}
-
-debugger;
-var op = createProxy(numbers);
-op.one = 5;
-console.log(op); // }
+} // debugger;
+// const op = createProxy(numbers);
+// op.one = 5;
+// console.log(op);
+// }
 // // debugger;
 // const newNumber = new Proxy(numbers,{
 //     set(target,prop,value){
@@ -254,7 +254,8 @@ console.log(op); // }
 
 
 
+
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.2ee622e9d5ad2aae5e05.js.map
+//# sourceMappingURL=index.7d437a3d5e32c88264e1.js.map
