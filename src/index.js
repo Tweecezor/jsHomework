@@ -119,12 +119,6 @@ function createProxy(obj) {
     })
 }
 
-let obj = createProxy ( { one: 1, two: 2 } );
-
-obj.one = 2;
-obj.two = 5;
-obj.three = 7;
-
 export {
     forEach,
     map,

@@ -232,16 +232,9 @@ function createProxy(obj) {
   });
 }
 
-var obj = createProxy({
-  one: 1,
-  two: 2
-});
-obj.one = 2;
-obj.two = 5;
-obj.three = 7;
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.8c709aced1d191243205.js.map
+//# sourceMappingURL=index.d82b987b8dfd29763c65.js.map
