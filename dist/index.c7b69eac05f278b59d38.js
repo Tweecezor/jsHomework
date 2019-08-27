@@ -122,7 +122,7 @@ function isAllTrue(array, fn) {
     throw new Error('fn is not a function');
   }
 
-  if (array.length == 0 || Array.isArray(array) == false) {
+  if (array.length == 0 || array instanceof Array == false) {
     throw new Error('empty array');
   }
 
@@ -157,7 +157,7 @@ function isAllTrue(array, fn) {
 
 
 function isSomeTrue(array, fn) {
-  if (array.length == 0 || Array.isArray(array) == false) {
+  if (array.length == 0 || array instanceof Array == false) {
     throw new Error('empty array');
   }
 
@@ -323,4 +323,4 @@ function calculator() {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.06fd4b436d6ae30f4a8c.js.map
+//# sourceMappingURL=index.c7b69eac05f278b59d38.js.map
