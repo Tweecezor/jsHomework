@@ -221,40 +221,27 @@ function slice(array) {
  Функция принимает объект и должна вернуть Proxy для этого объекта
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
-// let numbers= {
-//     one : '3',
-//     two : '2'
-//   };
 
 
 function createProxy(obj) {
-  for (var prop in obj) {
-    if (prop in obj) {
-      obj[prop] = obj[prop] * obj[prop];
+  return obj = new Proxy(obj, {
+    set: function set(target, prop, value) {
+      target[prop] = value * value;
+      return true;
     }
-  }
+  });
+}
 
-  return obj;
-} // debugger;
-// const op = createProxy(numbers);
-// op.one = 5;
-// console.log(op);
-// }
-// // debugger;
-// const newNumber = new Proxy(numbers,{
-//     set(target,prop,value){
-//         if(prop in target)
-//             target[prop] = target[prop]*target[prop];
-//         return true;
-//     }
-// })
-// newNumber.one = 6;
-// console.log(newNumber);
-
-
+var obj = createProxy({
+  one: 1,
+  two: 2
+});
+obj.one = 2;
+obj.two = 5;
+obj.three = 7;
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.8b9dbca81a1dc02afc9a.js.map
+//# sourceMappingURL=index.8c709aced1d191243205.js.map
