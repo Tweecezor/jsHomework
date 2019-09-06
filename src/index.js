@@ -1,5 +1,3 @@
-import { brotliDecompressSync } from "zlib";
-
 /* ДЗ 4 - работа с DOM */
 
 /*
@@ -14,11 +12,11 @@ import { brotliDecompressSync } from "zlib";
  */
 function createDivWithText(text) {
     var newElem = document.createElement('div');
+
     newElem.textContent = text;
+
     return newElem;
 }
-
-createDivWithText('hey');
 
 /*
  Задание 2:
@@ -65,7 +63,6 @@ function findAllPSiblings(where) {
     return arr;
 }
 
-
 /*
  Задание 4:
 
@@ -107,13 +104,12 @@ function findError(where) {
  */
 function deleteTextNodes(where) {
     var allKnots = where.childNodes;
-    console.log(allKnots);
-    for( var i = 0; i < allKnots.length; i++) {
+
+    for ( var i = 0; i < allKnots.length; i++) {
         if (allKnots[i].nodeType == 3) {
             where.removeChild(allKnots[i]);
         }
     }
-    console.log(allKnots);
 }
 
 /*
@@ -133,7 +129,7 @@ function deleteTextNodesRecursive(where) {
     while (child) {
         if (child.nextSibling!= null) {
             deleteTextNodesRecursive(child.nextSibling);
-        } else  if( child.nodeType == 3 ) {
+        } else if ( child.nodeType == 3 ) {
             where.removeChild(child);
         } 
         child = child.nextSibling;
