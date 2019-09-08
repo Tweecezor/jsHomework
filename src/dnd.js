@@ -27,9 +27,24 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
-    var a = 2;
+    var div = document.createElement('div');
+    var width = document.body.offsetWidth;
 
-    return a;
+    var height = document.body.offsetHeight;
+
+    div.style.width = `${Math.random()*(width-0) + 0}px `;
+    div.style.height = `${Math.random()*(height-0) + 0}px `;
+    div.style.position = 'relative';
+    div.style.left = `${Math.round(Math.random()*(width-0) + 0)}px`;
+    div.style.top = `${Math.round(Math.random()*(height-0) + 0)}px`;
+    div.style.background = `rgb(${Math.round(Math.random()*255)}, 
+        ${Math.round(Math.random()*(255-0)+0)}, 
+        ${Math.round(Math.random()*(255-0)+0)}
+    )`;
+    div.classList.add('draggable-div');
+    div.setAttribute('draggable', 'true');
+
+    return div;
 }
 
 /*
@@ -41,10 +56,32 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
-    var a = target;
+    var prevPosLeft;
 
-    return a;
+    var prevPosTop;
 
+    var diffLeft;
+
+    var diffTop;
+
+    target.addEventListener ('dragstart', (e)=> {
+        target.style.opacity = '0.5';
+        prevPosLeft = parseInt(target.style.left);
+        prevPosTop = parseInt(target.style.top);
+        diffLeft = prevPosLeft - e.clientX;
+        diffTop = prevPosTop - e.clientY;
+    })
+ 
+    target.addEventListener('dragend', (e)=> {
+        target.style.opacity = '1';
+
+        var newPosLeft = e.clientX + diffLeft;
+
+        var newPosTop = e.clientY + diffTop;
+
+        target.style.left = `${newPosLeft}px`;
+        target.style.top = `${newPosTop}px`;
+    })
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -55,6 +92,7 @@ addDivButton.addEventListener('click', function() {
 
     // добавить на страницу
     homeworkContainer.appendChild(div);
+
     // назначить обработчики событий мыши для реализации D&D
     addListeners(div);
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
