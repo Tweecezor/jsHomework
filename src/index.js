@@ -159,6 +159,42 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
+    function innerFn(node) {
+        if (node.nodeType == 3) {
+            obj.texts +=1;
+        }
+        if (node.className!=undefined && node.className!= '') {
+            var nodeList = node.classList;
+            
+            for (var i of nodeList) {
+                obj.classes[i] = obj.classes[i]+1 || 1;
+            }
+        }
+        if(node.nodeType == 1 && node.nodeName!= 'SCRIPT') {
+            obj.tags[node.nodeName] = obj.tags[node.nodeName]+1 || 1;
+        }
+        var child = node.childNodes;
+
+        for (var i =0; i< child.length; i++) {
+            innerFn(child[i]);
+        }
+    }
+    var obj = {
+        tags:{},
+        texts:0,
+        classes:{}
+    };
+    var child = root.childNodes;
+
+    var child_length = child.length;
+
+    for (var i=0;i<child_length;i++) {
+        var el = child[i];
+        innerFn(el);
+    }
+
+    return obj;
+
 }
 
 /*
