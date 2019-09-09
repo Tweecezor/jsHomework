@@ -170,26 +170,27 @@ function collectDOMStat(root) {
                 obj.classes[i] = obj.classes[i]+1 || 1;
             }
         }
-        if(node.nodeType == 1 && node.nodeName!= 'SCRIPT') {
+        if (node.nodeType == 1 && node.nodeName!= 'SCRIPT') {
             obj.tags[node.nodeName] = obj.tags[node.nodeName]+1 || 1;
         }
         var child = node.childNodes;
 
-        for (var i =0; i< child.length; i++) {
-            innerFn(child[i]);
+        for (var j = 0; j< child.length; j++) {
+            innerFn(child[j]);
         }
     }
     var obj = {
-        tags:{},
-        texts:0,
-        classes:{}
+        tags: {},
+        texts: 0,
+        classes: {}
     };
     var child = root.childNodes;
 
-    var child_length = child.length;
+    var childLength = child.length;
 
-    for (var i=0;i<child_length;i++) {
+    for (var i=0;i<childLength;i++) {
         var el = child[i];
+        
         innerFn(el);
     }
 
