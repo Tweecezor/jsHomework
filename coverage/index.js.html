@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">98.18% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>47/47</span>
+        <span class='fraction'>54/55</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">95.83% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>23/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">91.67% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>11/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">98.08% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>44/44</span>
+        <span class='fraction'>51/52</span>
       </div>
     </div>
     <p class="quiet">
@@ -291,7 +291,30 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,6 +549,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -728,7 +774,7 @@ function collectDOMStat(root) {
 &nbsp;
     for (var i=0;i&lt;childLength;i++) {
         var el = child[i];
-        
+&nbsp;
         innerFn(el);
     }
 &nbsp;
@@ -757,6 +803,7 @@ function collectDOMStat(root) {
    {
      type: 'insert',
      nodes: [div]
+&nbsp;
    }
 &nbsp;
    ------
@@ -769,6 +816,28 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+&nbsp;
+const mutationConfig = { attributes: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true, attributeOldValue: true, };
+document.addEventListener('DOMContentLoaded',<span class="fstat-no" title="function not covered" >(</span>e)=&gt;{
+<span class="cstat-no" title="statement not covered" >    where.append(elem);</span>
+})
+&nbsp;
+var onMutate = function(mutationsList) {
+    // console.log()
+    // console.log(mutationsList);
+    // console.log('dom cganged');
+    // console.log(mutationsList.addedNodes);
+    // fn();
+    mutationsList.forEach(mutation =&gt; {
+        // previous.textContent = mutation.oldValue;
+        fn();
+    });
+};
+&nbsp;
+&nbsp;
+var observer = new MutationObserver(onMutate);
+observer.observe(where, mutationConfig);
+&nbsp;
 }
 &nbsp;
 export {
@@ -787,7 +856,7 @@ export {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 09 2019 18:09:23 GMT+0300 (GMT+03:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 09 2019 22:48:31 GMT+0300 (GMT+03:00)
 </div>
 </div>
 <script src="prettify.js"></script>

@@ -190,7 +190,7 @@ function collectDOMStat(root) {
 
     for (var i=0;i<childLength;i++) {
         var el = child[i];
-        
+
         innerFn(el);
     }
 
@@ -219,6 +219,7 @@ function collectDOMStat(root) {
    {
      type: 'insert',
      nodes: [div]
+
    }
 
    ------
@@ -231,6 +232,28 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+
+const mutationConfig = { attributes: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true, attributeOldValue: true, };
+document.addEventListener('DOMContentLoaded',(e)=>{
+    where.append(elem);
+})
+
+var onMutate = function(mutationsList) {
+    // console.log()
+    // console.log(mutationsList);
+    // console.log('dom cganged');
+    // console.log(mutationsList.addedNodes);
+    // fn();
+    mutationsList.forEach(mutation => {
+        // previous.textContent = mutation.oldValue;
+        fn();
+    });
+};
+
+
+var observer = new MutationObserver(onMutate);
+observer.observe(where, mutationConfig);
+
 }
 
 export {
