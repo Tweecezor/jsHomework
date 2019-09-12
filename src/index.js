@@ -234,24 +234,22 @@ function collectDOMStat(root) {
 function observeChildNodes(where, fn) {
 
 const mutationConfig = { attributes: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true, attributeOldValue: true, };
-document.addEventListener('DOMContentLoaded',(e)=>{
-    where.append(elem);
-})
-
-var onMutate = function(mutationsList) {
-    // console.log()
-    // console.log(mutationsList);
-    // console.log('dom cganged');
-    // console.log(mutationsList.addedNodes);
-    // fn();
-    mutationsList.forEach(mutation => {
-        // previous.textContent = mutation.oldValue;
-        fn();
-    });
-};
 
 
-var observer = new MutationObserver(onMutate);
+
+
+var observer = new MutationObserver(()=>{
+    mutations.forEach((mutation)=>{
+        if(mutation.addedNodes.length){
+            console
+           fn({
+            type: 'insert',
+            nodes: [div]
+       
+          })
+        }
+    })
+});
 observer.observe(where, mutationConfig);
 
 }
