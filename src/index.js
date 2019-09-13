@@ -235,22 +235,38 @@ function observeChildNodes(where, fn) {
 
 const mutationConfig = { attributes: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true, attributeOldValue: true, };
 
+var observer = new MutationObserver ((mutations)=> {
+    mutations.forEach ((mutation)=> {
+        var obj = {
+            type: '',
+            nodes :[]
+        }
+        var addedLength = mutation.addedNodes.length;
+        var removedLength = mutation.removedNodes.length;
+        if (addedLength) { 
+            var arr = [];
 
+            for (var i=0;i<addedLength;i++) {
+             arr.push(mutation.addedNodes[i]);   
+            }
+            obj.type = 'insert';
+            obj.nodes = arr;
+            fn(obj)
+        }
+        if (removedLength) {
+            var arr = [];
 
-
-var observer = new MutationObserver(()=>{
-    mutations.forEach((mutation)=>{
-        if(mutation.addedNodes.length){
-            console
-           fn({
-            type: 'insert',
-            nodes: [div]
-       
-          })
+            for (var i=0;i<removedLength;i++) {
+             arr.push(mutation.removedNodes[i]);   
+            }
+            obj.type = 'remove';
+            obj.nodes = arr;
+            fn(obj)
         }
     })
 });
-observer.observe(where, mutationConfig);
+
+observer.observe (where, mutationConfig);
 
 }
 
