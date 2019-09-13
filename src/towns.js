@@ -1,4 +1,3 @@
-import { rejects } from "assert";
 
 /*
  Страница должна предварительно загрузить список городов из
@@ -32,15 +31,35 @@ import { rejects } from "assert";
  */
 const homeworkContainer = document.querySelector('#homework-container');
 
+var town;
+/* Блок с надписью "Загрузка" */
+const loadingBlock = homeworkContainer.querySelector('#loading-block');
+/* Блок с текстовым полем и результатом поиска */
+const filterBlock = homeworkContainer.querySelector('#filter-block');
+/* Текстовое поле для поиска по городам */
+const filterInput = homeworkContainer.querySelector('#filter-input');
+/* Блок с результатами поиска */
+const filterResult = homeworkContainer.querySelector('#filter-result');
+
 /*
  Функция должна вернуть Promise, который должен быть разрешен с массивом городов в качестве значения
 
  Массив городов пожно получить отправив асинхронный запрос по адресу
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
+
+function main() {
+    loadTowns()
+        .then( (cities) => {
+            makeCitiesArray(cities) 
+        })
+        .catch( () => {
+            errorHandler();
+        });
+}
+main();
  
- async function loadTowns() {
-    
+function loadTowns() {
     // return await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
     // .then((response)=>console.log(response.text()));
 
@@ -59,26 +78,24 @@ const homeworkContainer = document.querySelector('#homework-container');
     //     console.log(cities);
     //     })
     // });
-
-
-    return await new Promise ((resolve,reject)=> {
+    return new Promise ((resolve, reject)=> {
         const xhr = new XMLHttpRequest();
         
-        xhr.open('GET','https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+        xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
         xhr.send();
         xhr.responseType = 'json';
-        xhr.addEventListener('load',()=> {
+        xhr.addEventListener('load', ()=> {
             if (xhr.status < 400 ) {
                 loadingBlock.style.display = 'none';
-                filterBlock.style.display = "block";
+                filterBlock.style.display = 'block';
                 var response = (xhr.response);
-                // console.log(response);
-                response.sort ( (a,b) => {
-                if (a.name>b.name) {
-                    return 1;
-                } else {
-                    return -1;
-                }
+
+                response.sort ( (a, b) => {
+                    if (a.name > b.name) {
+                        return 1;
+                    } else if (a.name < b.name) {
+                        return -1;
+                    }
                 });
                 resolve(response);
             } else {
@@ -88,47 +105,41 @@ const homeworkContainer = document.querySelector('#homework-container');
         }) 
     })
 }
-// debugger;
-// var cities;
-// console.log('after cities init');
-// loadTowns().then((cities)=>console.log(cities));
-// console.log('after funct');
-// console.log(cities);
-// console.log('after cities 2');
 
-var town;
-
-var qq = loadTowns()
-.then((cities)=>{
+function makeCitiesArray(cities) {
     var arr = [];
 
-    for( var city in cities) {
-       arr.push(cities[city].name);
+    for ( var city in cities) {
+        if (cities.hasOwnProperty(city)) {
+            arr.push(cities[city].name);
+        }
     }
     town = arr;
-    // return arr;
-    // isMatching(arr,inputedChunk);
-    
-})
-.catch(()=>{
+}
+
+function errorHandler() {
+    homeworkContainer.innerHTML = '';
     var errorText = document.createElement('div');
+
     errorText.innerHTML = 'Произошла ошибка';
     var again = document.createElement('button');
+
     again.classList.add('again');
     again.innerHTML = 'Повторить'
     var fragment = document.createDocumentFragment();
+
     fragment.append(errorText);
     fragment.append(again);
     homeworkContainer.append(fragment);
     againRequest();
+}
 
-});
-
-function againRequest(){
+function againRequest() {
   
     const againBtn = homeworkContainer.querySelector('.again');
-    againBtn.addEventListener('click',()=>{
-        // debugger;
+
+    againBtn.addEventListener('click', ()=> {
+        main();
     })
 }
 
@@ -144,38 +155,36 @@ function againRequest(){
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
-    filterResult.innerHTML = [];
-    for (var i = 0; i<full.length;i++) {
-        if (full[i].toLowerCase().indexOf(chunk.toLowerCase()) != -1) {
-            var li = document.createElement('li');
-          
-            li.innerHTML = full[i];
-            filterResult.append(li);
-            // sortArr.push(full[i]);
-        }
+    // filterResult.innerHTML = [];
+    // console.log(full);
+    // for (var i = 0; i < full.length;i++) {
+    if (full.toLowerCase().indexOf(chunk.toLowerCase()) != -1) {
+
+        return true;
+    } else if (full.toLowerCase().indexOf(chunk.toLowerCase()) == -1) {
+        
+        return false;
     }
+    // }
 }
 
-/* Блок с надписью "Загрузка" */
-const loadingBlock = homeworkContainer.querySelector('#loading-block');
-/* Блок с текстовым полем и результатом поиска */
-const filterBlock = homeworkContainer.querySelector('#filter-block');
-/* Текстовое поле для поиска по городам */
-const filterInput = homeworkContainer.querySelector('#filter-input');
-/* Блок с результатами поиска */
-const filterResult = homeworkContainer.querySelector('#filter-result');
-
-
-
 filterInput.addEventListener('keyup', function() {
-    if(filterInput.value == '') {
+    if (filterInput.value == '') {
         filterResult.innerHTML = [];
     } else {
-        isMatching(town, filterInput.value);
+        filterResult.innerHTML = [];
+        for (var i = 0; i < town.length; i++) {
+          
+            if ( isMatching (town[i], filterInput.value) == true) {
+                var li = document.createElement('li');
+          
+                li.innerHTML = town[i];
+                filterResult.append(li);
+            }
+        }
     }
    
 });
-
 
 export {
     loadTowns,

@@ -22,12 +22,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>18/18</span>
+        <span class='fraction'>16/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>3/4</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>16/16</span>
+        <span class='fraction'>15/15</span>
       </div>
     </div>
     <p class="quiet">
@@ -153,29 +153,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">645x</span>
-<span class="cline-any cline-yes">336x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">309x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">430x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">224x</span>
+<span class="cline-any cline-yes">206x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">206x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +188,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,19 +230,21 @@ function loadAndSortTowns() {
     
     return new Promise ((resolve)=&gt; {
         const xhr = new XMLHttpRequest();
-        // 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json'
-        xhr.open('GET','https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+&nbsp;
+        xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
         xhr.send();
         xhr.responseType = 'json';
-        xhr.addEventListener('load',()=&gt; {
+        xhr.addEventListener('load', ()=&gt; {
             var response = (xhr.response);
-            console.log(response);
-            response.sort ( (a,b) =&gt; {
-            if (a.name&gt;b.name) {
-                return 1;
-            } else {
-                return -1;
-            }
+&nbsp;
+            response.sort ( (a, b) =&gt; {
+                if (a.name &gt; b.name) {
+&nbsp;
+                    return 1;
+                } else <span class="missing-if-branch" title="else path not taken" >E</span>if (a.name &lt;= b.name) {
+&nbsp;
+                    return -1;
+                }
             // debugger;
             // (a.name &gt; b.name) ? 1 : -1;
             });
@@ -264,8 +266,6 @@ function loadAndSortTowns() {
     })
 &nbsp;
 }
-// debugger;
-loadAndSortTowns().then((towns)=&gt;console.log(towns));
 &nbsp;
 export {
     delayPromise,
@@ -277,7 +277,7 @@ export {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Sep 12 2019 22:13:42 GMT+0300 (GMT+03:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Sep 13 2019 23:03:44 GMT+0300 (GMT+03:00)
 </div>
 </div>
 <script src="prettify.js"></script>
