@@ -49,4 +49,90 @@ filterNameInput.addEventListener('keyup', function() {
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
+
+    clearTable();
+    var inputName = addNameInput.value;
+    var inputValue = addValueInput.value;
+    console.log(document.cookie);
+    document.cookie = `${inputName}=${inputValue}`;
+    addNameInput.value = '';
+    addValueInput.value = '';
+    // console.log( document.cookie);
+    // console.log(takeCokkie());
+    // createTableField(inputName,inputValue);
+    createCookieTable();
 });
+// function addNewCookie() {
+//     createTableField(item,cookie[item]);
+// }
+function createCookieTable() {
+    var cookie = takeCokkie();
+    console.log(cookie);
+    // console.log(cookie);
+   
+    // console.log(cookie);
+    // console.log(JSON.stringify(cookie));
+    // console.log(cookie);
+    for (var item in cookie) {
+        if (cookie[item] != undefined) {
+            createTableField( item, cookie[item] );
+        }
+    }
+   
+    // listTable.append(tableNewLine);
+    // tableNewLine.append(tableName);
+    // tableNewLine.append(tableValue);
+    // tableNewLine.append(tableDelete);
+   
+}
+
+function createTableField(name,value,sameName){
+    var tableNewLine = document.createElement('tr');
+
+    var tableName = document.createElement('td');
+
+    var tableValue = document.createElement('td');
+
+    var tableDelete = document.createElement('button');
+   
+    tableValue.innerHTML = value;
+    tableName.innerHTML = name;
+    tableDelete.innerHTML = 'Push'
+    listTable.append(tableNewLine);
+    tableNewLine.append(tableName);
+    tableNewLine.append(tableValue);
+    tableNewLine.append(tableDelete);
+
+    tableDelete.addEventListener('click',(e)=>{
+        // console.log(e.target.parentNode);
+        // console.log(document.cookie);
+        // console.log(tableName.innerHTML);
+        // console.log(tableValue);
+        document.cookie = `${tableName.innerHTML}=${tableValue.innerHTML};expires=Thu, 01 Jan 1970 00:00:01 GMT"`;
+        listTable.removeChild(e.target.parentNode);
+        // console.log(tableValue);
+        // console.log(document.cookie);
+       
+       
+    })
+}
+
+function takeCokkie(){
+   return document.cookie.split('; ').reduce((prev,current)=>{
+        var [name,value] = current.split('=');
+
+        prev[name] = value;
+        return prev;
+        },{})
+}
+createCookieTable();
+
+function clearTable(){
+    // debugger;
+    console.log(document.cookie);
+    var lengthOfChild = listTable.children.length
+    for(var i =0; i<lengthOfChild; i++) {
+        listTable.removeChild(listTable.firstElementChild);
+    }   
+    console.log(document.cookie);
+}
