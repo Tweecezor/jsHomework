@@ -48,7 +48,7 @@ function loadAndSortTowns() {
                     return -1;
                 }
             // debugger;
-            // (a.name > b.name) ? 1 : -1;
+            // (a.name > b.name) ? return1 : return-1;
             });
             resolve(response);
             // console.log(response);
