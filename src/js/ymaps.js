@@ -5,7 +5,7 @@ function mapInit() {
         var modal = document.querySelector('.modal');
         var modalWrapper = document.querySelector('.modal-wrapper');
         var modalReviewContent = document.querySelector('.modal-comments__wrapper');
-        var emtyReview = document.querySelector('.modal-comments__comment-empty');
+        var emtyReview = modalReviewContent.innerHTML;
         var location = document.querySelector('.modal-header__location');
         var closeModal = document.querySelector('.modal-header__close');
         var addButton = document.querySelector('.modal-comment__btn');
@@ -42,7 +42,8 @@ function mapInit() {
             var balloonModal = {
                 style:modal.style.cssText,
                 address:document.querySelector('.modal-header__location').innerHTML,
-                reviews:document.querySelector('.modal-comments__wrapper').innerHTML
+                reviews:document.querySelector('.modal-comments__wrapper').innerHTML,
+                coords:coords
             }
             // console.log(typeof balloonModal);
 
@@ -60,6 +61,9 @@ function mapInit() {
 
         myMap.events.add('click', function (e) {
                 clearModalReviewField();
+                // modalReviewContent.innerHTML = document.querySelector('.modal-comments__comment-empty').innerHTML;
+                modalReviewContent.innerHTML = emtyReview;
+                console.log(emtyReview)
                 coords = e.get('coords');
                 var geoCoords = ymaps.geocode(coords);
                 var position = e.get('position');
@@ -103,6 +107,7 @@ function mapInit() {
                 })
         });
         addButton.addEventListener('click',(e)=>{
+            console.log(coords);
             console.log('last');
             e.preventDefault();
             // addButtonActions(coords,address)
@@ -118,7 +123,8 @@ function mapInit() {
                     place:place,
                     desc:desc,
                     date:date,
-                    address:address
+                    address:address,
+                    coords:coords
                 };
                 console.log(review.date);
                 addReviewToModal(review);
@@ -215,6 +221,7 @@ function mapInit() {
                 }
             } else {
                 return 0;
+                
             }
             
         }
@@ -278,6 +285,7 @@ function mapInit() {
         //   console.log(addButton);
         //   console.log(e.properties.data.balloonContent)
         e.preventDefault();
+        console.log(e.get('coords'));
         console.log(e.get('target'));
         var props  = e.get('target').properties;
 
@@ -293,41 +301,41 @@ function mapInit() {
         modal.style.cssText = bContent.style
         document.querySelector('.modal-header__location').innerHTML = bContent.address;
         document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
-
+        coords = bContent.coords;
 
         modal.classList.add('modal-show');
 
         // addButtonActions('','',)
         var addButton = document.querySelector('.modal-comment__btn'); 
-        addButton.addEventListener('click',(e)=>{
-            // debugger;
-            console.log('newnew')
-            console.log(coords);
-            e.preventDefault();
-            if (validate()) { 
-                // console.log(coords);
-                let name = inputedName.value;
-                let place = inputedPlace.value;
-                let desc = inputedDesc.value;
-                var date = new Date().toLocaleString('ru');
+        // addButton.addEventListener('click',(e)=>{
+        //     // debugger;
+        //     console.log('newnew')
+        //     console.log(coords);
+        //     e.preventDefault();
+        //     if (validate()) { 
+        //         // console.log(coords);
+        //         let name = inputedName.value;
+        //         let place = inputedPlace.value;
+        //         let desc = inputedDesc.value;
+        //         var date = new Date().toLocaleString('ru');
                 
-                var review = {
-                    name:name,
-                    place:place,
-                    desc:desc,
-                    date:date,
-                    address:address
-                };
-                // console.log(review.date);
-                addReviewToModal(review);
-                var balloonModalNew = modalWrapper.innerHTML;
-                console.log('Координаты'+coords);
-                // props.set('balloonContent',balloonModalNew);
-                // myMap.geoObjects.add(makeMark(coords,review));
-                clearInputs();
-            }
+        //         var review = {
+        //             name:name,
+        //             place:place,
+        //             desc:desc,
+        //             date:date,
+        //             address:address
+        //         };
+        //         // console.log(review.date);
+        //         addReviewToModal(review);
+        //         var balloonModalNew = modalWrapper.innerHTML;
+        //         console.log('Координаты'+coords);
+        //         // props.set('balloonContent',balloonModalNew);
+        //         myMap.geoObjects.add(makeMark(coords,review));
+        //         clearInputs();
+        //     }
            
-        })
+        // })
         // closeModal.addEventListener('click',(e)=>{
         //     modal.classList.remove('modal-show');
         // })
