@@ -13,7 +13,6 @@ function mapInit() {
         let inputedName = document.querySelector(".modal-comment__name");
         let inputedPlace = document.querySelector(".modal-comment__place");
         let inputedDesc = document.querySelector(".modal-comment__desc");
-        var reviewsData = {};
 
         var myMap = new ymaps.Map("map", {
         center: [55.75399399999374,37.62209300000001],
@@ -57,7 +56,54 @@ function mapInit() {
              })
             
         }
-        
+
+        function makeClusterMark(coords,data){
+
+            // console.log([data.place,data.address,data.desc].join('<br/>'));
+            // var balloonHTML = `${data.place} <br/> <a href="" class='balloonLink'>${data.address}</a><br/> ${data.desc}`
+            // console.log(balloonHTML);
+            console.log(BalloonContentLayout);
+            return new ymaps.Placemark(coords, {
+                place : `${data.place}`,
+                address : `${data.address}`,
+                desc : `${data.desc}`
+             },{
+               balloonContent:BalloonContentLayout
+             })
+        }
+
+        var BalloonContentLayout = ymaps.templateLayoutFactory.createClass(
+            '<div style="margin: 10px;">' +
+                '<b>{{properties.place}}</b><br />' +
+                '<i id="count"></i> ' +
+                '<button id="counter-button"> +1 </button>' +
+            '</div>', {
+
+            // Переопределяем функцию build, чтобы при создании макета начинать
+            // слушать событие click на кнопке-счетчике.
+            build: function () {
+                // Сначала вызываем метод build родительского класса.
+                BalloonContentLayout.superclass.build.call(this);
+                // А затем выполняем дополнительные действия.
+                document.querySelector('.balloonLink').bind('click', this.onLinkClick);
+                // $('#count').html(counter);
+            },
+
+            // Аналогично переопределяем функцию clear, чтобы снять
+            // прослушивание клика при удалении макета с карты.
+            clear: function () {
+                // Выполняем действия в обратном порядке - сначала снимаем слушателя,
+                // а потом вызываем метод clear родительского класса.
+                document.querySelector('.balloonLink').unbind('click', this.onLinkClick);
+                BalloonContentLayout.superclass.clear.call(this);
+            },
+
+            onLinkClick: function () {
+               console.log('worked');
+            }
+        });
+
+       
 
         myMap.events.add('click', function (e) {
                 clearModalReviewField();
@@ -77,33 +123,6 @@ function mapInit() {
                 ymaps.geocode(coords).then((res) =>{
                     address = res.geoObjects.get(0).getAddressLine();
                     location.innerHTML = address;  
-                  
-                    // addButton.addEventListener('click',(e)=>{
-                    //     console.log('last');
-                    //     e.preventDefault();
-                    //     // addButtonActions(coords,address)
-                    //     if (validate()) { 
-                    //         // console.log(coords);
-                    //         let name = inputedName.value;
-                    //         let place = inputedPlace.value;
-                    //         let desc = inputedDesc.value;
-                    //         var date = new Date().toLocaleString('ru');
-                            
-                    //         var review = {
-                    //             name:name,
-                    //             place:place,
-                    //             desc:desc,
-                    //             date:date,
-                    //             address:address
-                    //         };
-                    //         console.log(review.date);
-                    //         addReviewToModal(review);
-
-                    //         myMap.geoObjects.add(makeMark(coords,review));
-                    //         clearInputs();
-                    //     }
-                       
-                    // })
                 })
         });
         addButton.addEventListener('click',(e)=>{
@@ -129,61 +148,13 @@ function mapInit() {
                 console.log(review.date);
                 addReviewToModal(review);
 
+               
+                clusterer.add(makeClusterMark(coords,review));
                 myMap.geoObjects.add(makeMark(coords,review));
                 clearInputs();
             }
            
         })
-
-        // function addButtonActions(coords,address,balloonContent,currentPlacemark){
-        //     // console.log(balloonContent);
-        //     if(balloonContent==undefined) {
-        //         if (validate()) { 
-        //             // console.log(coords);
-        //             let name = inputedName.value;
-        //             let place = inputedPlace.value;
-        //             let desc = inputedDesc.value;
-        //             var date = new Date().toLocaleString('ru');
-                    
-        //             var review = {
-        //                 name:name,
-        //                 place:place,
-        //                 desc:desc,
-        //                 date:date,
-        //                 address:address
-        //             };
-        //             console.log(review.date);
-        //             addReviewToModal(review);
-    
-        //             myMap.geoObjects.add(makeMark(coords,review));
-        //             clearInputs();
-        //         }
-        //     } else {
-        //         if (validate()) { 
-        //             // console.log(coords);
-        //             let name = inputedName.value;
-        //             let place = inputedPlace.value;
-        //             let desc = inputedDesc.value;
-        //             var date = new Date().toLocaleString('ru');
-                    
-        //             var review = {
-        //                 name:name,
-        //                 place:place,
-        //                 desc:desc,
-        //                 date:date,
-        //                 address:address
-        //             };
-        //             // console.log(review.date);
-        //             addReviewToModal(review);
-        //             var balloonModalNew = modalWrapper.innerHTML;
-        //             // console.log('Координаты'+coords);
-        //             currentPlacemark.set('balloonContent',balloonModalNew);
-        //             // myMap.geoObjects.add(makeMark(coords,review));
-        //             clearInputs();
-        //         }
-        //     }
-            
-        // }
        
         closeModal.addEventListener('click',(e)=>{
             modal.classList.remove('modal-show');
@@ -285,64 +256,58 @@ function mapInit() {
         //   console.log(addButton);
         //   console.log(e.properties.data.balloonContent)
         e.preventDefault();
-        console.log(e.get('coords'));
-        console.log(e.get('target'));
+        // console.log(e.get('coords'));
+        // console.log(e.get('target'));
         var props  = e.get('target').properties;
-
-        var bContent = JSON.parse(props.get('balloonContent'));
-        // console.log ();
-
-        // var newContent = 'sdgfdhfgj';
-        // props.set('balloonContent',newContent);
-
-        // var bContent1 = props.get('balloonContent');
-        console.log(bContent);
-        // var [address,reviews] = bContent.split(';');
-        modal.style.cssText = bContent.style
-        document.querySelector('.modal-header__location').innerHTML = bContent.address;
-        document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
-        coords = bContent.coords;
-
-        modal.classList.add('modal-show');
-
-        // addButtonActions('','',)
-        var addButton = document.querySelector('.modal-comment__btn'); 
-        // addButton.addEventListener('click',(e)=>{
-        //     // debugger;
-        //     console.log('newnew')
-        //     console.log(coords);
-        //     e.preventDefault();
-        //     if (validate()) { 
-        //         // console.log(coords);
-        //         let name = inputedName.value;
-        //         let place = inputedPlace.value;
-        //         let desc = inputedDesc.value;
-        //         var date = new Date().toLocaleString('ru');
-                
-        //         var review = {
-        //             name:name,
-        //             place:place,
-        //             desc:desc,
-        //             date:date,
-        //             address:address
-        //         };
-        //         // console.log(review.date);
-        //         addReviewToModal(review);
-        //         var balloonModalNew = modalWrapper.innerHTML;
-        //         console.log('Координаты'+coords);
-        //         // props.set('balloonContent',balloonModalNew);
-        //         myMap.geoObjects.add(makeMark(coords,review));
-        //         clearInputs();
-        //     }
+        // console.log(e.get('target'));
+        // console.log(typeof e.get('target').getGeoObjects);
+        console.log(e.get('target').state.get('activeObject'));
+        if(typeof e.get('target').getGeoObjects != 'function') {
+            var bContent = JSON.parse(props.get('balloonContent'));
+            // console.log ();
+    
+            // var newContent = 'sdgfdhfgj';
+            // props.set('balloonContent',newContent);
+    
+            // var bContent1 = props.get('balloonContent');
+            // console.log(bContent);
+            // var [address,reviews] = bContent.split(';');
+            modal.style.cssText = bContent.style
+            document.querySelector('.modal-header__location').innerHTML = bContent.address;
+            document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
+            coords = bContent.coords;
+    
+            modal.classList.add('modal-show');
+        } else {
+            // console.log('cluster clicked');
+            var balloonLink = document.querySelector('.balloonLink');
+            // console.log(balloonLink);
+            // balloonLink.addEventListener('click',(e)=>{
+            //     e.preventDefault();
+            //     console.log('worked');
+            // })
            
-        // })
-        // closeModal.addEventListener('click',(e)=>{
-        //     modal.classList.remove('modal-show');
-        // })
-        // modal.innerHTML = e.properties.data.balloonContent;
-  })
+        }
+       
 
+    })
+
+
+    var clusterer = new ymaps.Clusterer({
+        // preset: 'twirl#invertedRedClusterIcons',
+        clusterDisableClickZoom: true,
+        clusterOpenBalloonOnClick: true,
+        clusterBalloonContentLayout: "cluster#balloonCarousel",
+        // clusterBalloonItemContentLayout: customItemContentLayout
+      });
+      
+    myMap.geoObjects.add(clusterer);
+
+
+    
+    
     });
+
    
 }
 
