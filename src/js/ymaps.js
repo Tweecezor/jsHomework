@@ -16,7 +16,8 @@ function mapInit() {
 
         var myMap = new ymaps.Map("map", {
         center: [55.75399399999374,37.62209300000001],
-        zoom: 12
+        zoom: 12,
+        controls:[]
         });
 
         
@@ -46,75 +47,34 @@ function mapInit() {
             }
             // console.log(typeof balloonModal);
 
-            return new ymaps.Placemark(coords, {
-               balloonContent:JSON.stringify(balloonModal)
-             }, {
+            return new ymaps.Placemark(coords,
+                {
+                    balloonContent:JSON.stringify(balloonModal),
+                    place:data.place,
+                    address:data.address,
+                    desc:data.desc,
+                    date:data.date
+                }, 
+                {
                 iconLayout: 'default#image',
                 iconImageHref: './src/img/Mark.png',
                 iconImageSize: [30, 42],
                 iconImageOffset: [-13, -38]
-             })
+                }
+            )
             
         }
-
-        function makeClusterMark(coords,data){
-
-            // console.log([data.place,data.address,data.desc].join('<br/>'));
-            // var balloonHTML = `${data.place} <br/> <a href="" class='balloonLink'>${data.address}</a><br/> ${data.desc}`
-            // console.log(balloonHTML);
-            console.log(BalloonContentLayout);
-            return new ymaps.Placemark(coords, {
-                place : `${data.place}`,
-                address : `${data.address}`,
-                desc : `${data.desc}`
-             },{
-               balloonContent:BalloonContentLayout
-             })
-        }
-
-        var BalloonContentLayout = ymaps.templateLayoutFactory.createClass(
-            '<div style="margin: 10px;">' +
-                '<b>{{properties.place}}</b><br />' +
-                '<i id="count"></i> ' +
-                '<button id="counter-button"> +1 </button>' +
-            '</div>', {
-
-            // Переопределяем функцию build, чтобы при создании макета начинать
-            // слушать событие click на кнопке-счетчике.
-            build: function () {
-                // Сначала вызываем метод build родительского класса.
-                BalloonContentLayout.superclass.build.call(this);
-                // А затем выполняем дополнительные действия.
-                document.querySelector('.balloonLink').bind('click', this.onLinkClick);
-                // $('#count').html(counter);
-            },
-
-            // Аналогично переопределяем функцию clear, чтобы снять
-            // прослушивание клика при удалении макета с карты.
-            clear: function () {
-                // Выполняем действия в обратном порядке - сначала снимаем слушателя,
-                // а потом вызываем метод clear родительского класса.
-                document.querySelector('.balloonLink').unbind('click', this.onLinkClick);
-                BalloonContentLayout.superclass.clear.call(this);
-            },
-
-            onLinkClick: function () {
-               console.log('worked');
-            }
-        });
-
-       
+        var baloonLayout;
 
         myMap.events.add('click', function (e) {
                 clearModalReviewField();
-                // modalReviewContent.innerHTML = document.querySelector('.modal-comments__comment-empty').innerHTML;
+               
                 modalReviewContent.innerHTML = emtyReview;
-                console.log(emtyReview)
+             
                 coords = e.get('coords');
                 var geoCoords = ymaps.geocode(coords);
                 var position = e.get('position');
-                // console.log(geoCoords);
-                console.log(coords)
+            
                 var [posX,posY] = position;
                 modal.classList.add('modal-show');
                 modal.style.top = `${posY}px`;
@@ -126,10 +86,9 @@ function mapInit() {
                 })
         });
         addButton.addEventListener('click',(e)=>{
-            console.log(coords);
-            console.log('last');
+     
             e.preventDefault();
-            // addButtonActions(coords,address)
+ 
             if (validate()) { 
                 // console.log(coords);
                 let name = inputedName.value;
@@ -145,12 +104,11 @@ function mapInit() {
                     address:address,
                     coords:coords
                 };
-                console.log(review.date);
+  
                 addReviewToModal(review);
 
-               
-                clusterer.add(makeClusterMark(coords,review));
-                myMap.geoObjects.add(makeMark(coords,review));
+   
+                clusterer.add(makeMark(coords,review));
                 clearInputs();
             }
            
@@ -162,7 +120,7 @@ function mapInit() {
 
         function addReviewToModal(review){
            var emtyReview = document.querySelector('.modal-comments__comment-empty');
-            // console.log(emtyReview);
+   
             if(emtyReview) {
                 modalReviewContent.removeChild(emtyReview);
                addHTML(review);
@@ -253,17 +211,20 @@ function mapInit() {
  
         })
       myMap.geoObjects.events.add('click',(e)=>{
-        //   console.log(addButton);
-        //   console.log(e.properties.data.balloonContent)
+
         e.preventDefault();
-        // console.log(e.get('coords'));
-        // console.log(e.get('target'));
+    
         var props  = e.get('target').properties;
         // console.log(e.get('target'));
         // console.log(typeof e.get('target').getGeoObjects);
-        console.log(e.get('target').state.get('activeObject'));
+        // console.log(e.get('target').state.get('activeObject'));
         if(typeof e.get('target').getGeoObjects != 'function') {
             var bContent = JSON.parse(props.get('balloonContent'));
+            var currentCoords = e.get('coords');
+            console.log(currentCoords);
+            var position = e.get('position');
+            console.log(position);
+            var [left,top] = position;
             // console.log ();
     
             // var newContent = 'sdgfdhfgj';
@@ -272,10 +233,13 @@ function mapInit() {
             // var bContent1 = props.get('balloonContent');
             // console.log(bContent);
             // var [address,reviews] = bContent.split(';');
-            modal.style.cssText = bContent.style
+            // modal.style.cssText = bContent.style
+            modal.style.top = `${top}px`;
+            modal.style.left = `${left}px`
             document.querySelector('.modal-header__location').innerHTML = bContent.address;
             document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
-            coords = bContent.coords;
+            // coords = bContent.coords;
+            coords = currentCoords;
     
             modal.classList.add('modal-show');
         } else {
@@ -286,25 +250,42 @@ function mapInit() {
             //     e.preventDefault();
             //     console.log('worked');
             // })
+            console.log(e.get('target'));
            
         }
        
 
     })
 
+    document.addEventListener('click',(e)=>{
+        var target = e.target;
+        // console.log(target);
+        if( target.className=="balloon_address"){
+          modal.classList.add('modal-show');
+        //   console.log(target.parentNode);
+        console.log(myMap.geoObjects.get('balloonContent'));
+        } else {
+            console.log('nononono')
+        }
+    })
 
-    var clusterer = new ymaps.Clusterer({
-        // preset: 'twirl#invertedRedClusterIcons',
+
+    var customItemContentLayout = ymaps.templateLayoutFactory.createClass(
+        "<h2 class=balloon_place>{{properties.place|raw}}</h2>" +
+          "<div class=balloon_address>{{properties.address|raw}}</div>" +
+          "<div class=balloon_desc>{{properties.desc|raw}}</div>" + 
+          "<div class=balloon_date>{{properties.date|raw}}</div>" 
+      );
+    
+      var clusterer = new ymaps.Clusterer({
+        preset: 'twirl#invertedRedClusterIcons',
         clusterDisableClickZoom: true,
         clusterOpenBalloonOnClick: true,
         clusterBalloonContentLayout: "cluster#balloonCarousel",
-        // clusterBalloonItemContentLayout: customItemContentLayout
+        clusterBalloonItemContentLayout: customItemContentLayout
       });
-      
-    myMap.geoObjects.add(clusterer);
-
-
     
+      myMap.geoObjects.add(clusterer);
     
     });
 
