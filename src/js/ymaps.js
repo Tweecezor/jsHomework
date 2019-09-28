@@ -242,6 +242,7 @@ function mapInit() {
             modal.style.left = `${left}px`
             document.querySelector('.modal-header__location').innerHTML = bContent.address;
             document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
+            // address = bContent.address;
             // coords = bContent.coords;
             coords = currentCoords;
           
@@ -251,7 +252,7 @@ function mapInit() {
 
             var balloonLink = document.querySelector('.balloonLink');
    
-            console.log(e.get('target'));
+            // console.log(e.get('target'));
            
         }
 
@@ -265,12 +266,14 @@ function mapInit() {
                 // console.log(e.get('coords'));
          
         //   console.log(reviewsData)
-          console.log(coords);
+        //   console.log(coords);
         //   console.log(reviewsData[coords].reviews);
         //   console.log(target.dataset.coords);
           var dataCoords = target.dataset.coords;
         //   console.log(reviewsData[dataCoords].reviews);
           console.log(reviewsData[dataCoords].coords);
+          console.log(reviewsData[dataCoords].address);
+        //   address = reviewsData[dataCoords].address;
 
           document.querySelector('.modal-header__location').innerHTML = reviewsData[dataCoords].address;   
           document.querySelector('.modal-comments__wrapper').innerHTML = reviewsData[dataCoords].reviews;   
@@ -307,7 +310,7 @@ function mapInit() {
        
        
         } else {
-            console.log('nononono')
+            // console.log('nononono')
         }
     })
 
