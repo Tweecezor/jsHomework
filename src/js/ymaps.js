@@ -242,7 +242,6 @@ function mapInit() {
             modal.style.left = `${left}px`
             document.querySelector('.modal-header__location').innerHTML = bContent.address;
             document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
-            // address = bContent.address;
             // coords = bContent.coords;
             coords = currentCoords;
           
@@ -273,8 +272,8 @@ function mapInit() {
         //   console.log(reviewsData[dataCoords].reviews);
           console.log(reviewsData[dataCoords].coords);
           console.log(reviewsData[dataCoords].address);
-        //   address = reviewsData[dataCoords].address;
-
+          address = reviewsData[dataCoords].address;
+          
           document.querySelector('.modal-header__location').innerHTML = reviewsData[dataCoords].address;   
           document.querySelector('.modal-comments__wrapper').innerHTML = reviewsData[dataCoords].reviews;   
 
