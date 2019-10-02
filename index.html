@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My Chat</title>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+        }
+        .wrapper{
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar-wrap{
+            background-color: orange;
+            width:20%;
+        }
+        .sidebar{
+          margin:10px;
+           display: flex;
+           flex-direction: column;
+          
+        }
+        .sidebar__text-wrapper{
+            display: flex;
+            align-items: center;
+        }
+        .sidebar__avatar{
+            width:50px;
+            height: 50px;
+            border-radius: 50%;
+            background: grey;
+            margin-right: 5px;;
+        }
+        .main-content-wrap{
+            width:78%;
+            margin-left:2%;
+        }
+        .main-content{
+           margin:10px;
+        }
+        .auth{
+            background: grey;
+            padding: 20px 10px;
+            border-radius: 10px;
+        }
+        .auth-head{
+            padding: 0;
+            margin:0;
+        }
+        .auth__form{
+            background: #fff;
+            padding:10px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+        }
+        input{
+            border-radius: 10px;
+            border:2px solid grey;
+            padding:5px;
+            margin-bottom:10px;
+        }
+        button{
+            background:orange;
+            border: none;
+            border-radius: 10px;
+        }
+        .auth__btn{
+            width:20%;
+           align-items: flex-end;
+        }
+        .chatArea__inputMsg{
+            width:70%;
+        }
+        .chatArea__form{
+            position:fixed;
+            bottom:20px;
+            width:100%;
+        }
+        .chatArea__message-list{
+            list-style: none;
+        }
+        .chatArea__message-item{
+        }
+    </style>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+ 
+  <body>
+    <div class="wrapper">
+        <div class="sidebar-wrap">
+            <div class="sidebar">
+                <div class="sidebar__text-wrapper">
+                    <div class="sidebar__avatar">
+                        <img src="" alt="" class="sidebar__avatar-img">
+                    </div>
+                    <div class="sidebar__text">Добро Пожаловать</div>
+                </div>
+                <div class="sidebar__members">
+                    <div class="sidebar__members-head">Участники</div>
+                    <span class="sidebar__members-count"></span>
+                    <ul class="members-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main-content-wrap">
+            <div class="main-content">
+                <div class="auth">
+                    <h2 class="auth-head">Авторизация</h2>
+                    <form action="" class="auth__form">
+                        <input type="text" class="name" placeholder="input your name">
+                        <input type="text" class="nickname" placeholder="input your nickname">
+                        <button class="auth__btn">войти</button>
+                    </form>
+                </div>
+                <div class="chatArea">
+                    <ul class="chatArea__message-list">
+                    </ul>
+                    <form action="" class="chatArea__form">
+                        <input type="text" class="chatArea__inputMsg" placeholder="enter your message">
+                        <button class="chatArea__btn">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+
+
+  <script>
+        $(function(){
+            var socket = io();
+            var userName  = document.querySelector('.name');
+            var userForm =  document.querySelector('.auth__form');
+            var $users = $('.members-list');
+
+            // window.addEventListener('load',(e)=>{
+            // console.log('srge');
+              
+            //    console.log('srge');
+            // })
+            socket.on('connect',(e)=>{
+                console.log('hey there');
+                socket.emit('get all users');
+            })
+
+            $('.chatArea__form').submit(function(e){
+               
+                e.preventDefault(); 
+                let time  = `${new Date().getHours()}:${new Date().getMinutes()}`;
+                let inputedMsg = document.querySelector('.chatArea__inputMsg');
+                socket.emit('chat message', inputedMsg.value,time);
+                inputedMsg.value = '';
+                return false;
+               
+            });
+            $('.auth__form').submit(function(e){
+                e.preventDefault();
+                socket.emit('new user', userName.value,function(data){
+                   console.log(userName.value);
+                    if(data){
+                        $('.auth').hide();
+                        $('.chatArea').show(); 
+                    }
+                });
+            })
+            socket.on('new message', function(msg,){
+                $('.chatArea__message-list').append(`<li class="chatArea__message-item"><strong>${msg.user} </strong>  ${msg.data} : ${msg.time}</li>`);
+            });
+            socket.on('getUsers',function(usersData){
+                console.log(usersData);
+                var html = '';
+                for( var i=0; i<usersData.length; i++){
+                    html+=`<li>${usersData[i]}</li>`;
+                }
+                console.log(html);
+                $users.html(html);
+            })
+        })
+      </script>
+</html>
