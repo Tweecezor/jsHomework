@@ -44,7 +44,7 @@ io.on('connection', function(socket){
         })
         io.emit('showWhoLeave',socket.username);
         // console.log(socket.username);
-        console.log('Disconected:  %s user connected',connections.length);
+        console.log(`Disconected:${socket.username} ;${connections.length} user connected`,);
         // console.log(usersDataBase);
     });
 
@@ -60,13 +60,14 @@ io.on('connection', function(socket){
         console.log("-------start fn new user---------");
         console.log('userDataBase before add new user')
         console.log(usersDataBase);
+        var valide = true;
         if(usersDataBase.length == 0) {
             usersDataBase.push(user);
             socket.username = data;
             usersNames.push(socket.username);
             updateUserNames();
         } else{
-
+            
             for(var i=0;i<usersDataBase.length;i++){
                 // console.log("item forn DATABASE")
                 // console.log(usersDataBase[i]);
@@ -81,29 +82,36 @@ io.on('connection', function(socket){
                     user = usersDataBase[i];
                     console.log(user);
                     io.emit("addHistory",user.history);
-                    return true;
+                    i = usersDataBase.length;
+                    valide = false;
                 } else if(usersDataBase[i].name == user.name && usersDataBase[i].nickname != user.nickname){
                     console.log('этот ник уже занят. Введите другой')
-                    return
+                    i = usersDataBase.length;
+                    valide = false;
                 }
 
             }
-            // console.log('firsst time visit');
-            usersDataBase.push(user);
-            socket.username = data;
-            usersNames.push(socket.username);
-            updateUserNames();
-            // console.log('DATABASE after added new user');
-            // console.log(usersDataBase);
 
+            if(valide){
+                usersDataBase.push(user);
+                socket.username = data;
+                usersNames.push(socket.username);
+                updateUserNames();
+                // console.log('DATABASE after added new user');
+                // console.log(usersDataBase);
+    
+               
+                console.log("-------end fn new user---------");
+            }
+            // console.log('firsst time visit');
            
-            console.log("-------end fn new user---------");
         }
         if(data !== ''){
             callback(true);
         } else{
             console.log('doesnt work');
         }
+      
 
 
      
