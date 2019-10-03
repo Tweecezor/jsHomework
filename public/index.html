@@ -19,7 +19,6 @@
           margin:10px;
            display: flex;
            flex-direction: column;
-          
         }
         .sidebar__text-wrapper{
             display: flex;
@@ -118,6 +117,7 @@
                 </div>
                 <div class="chatArea">
                     <ul class="chatArea__message-list">
+                        <li>fghjkl</li>
                     </ul>
                     <form action="" class="chatArea__form">
                         <input type="text" class="chatArea__inputMsg" placeholder="enter your message">
@@ -131,55 +131,5 @@
 
 
 
-  <script>
-        $(function(){
-            var socket = io();
-            var userName  = document.querySelector('.name');
-            var userForm =  document.querySelector('.auth__form');
-            var $users = $('.members-list');
-
-            // window.addEventListener('load',(e)=>{
-            // console.log('srge');
-              
-            //    console.log('srge');
-            // })
-            socket.on('connect',(e)=>{
-                console.log('hey there');
-                socket.emit('get all users');
-            })
-
-            $('.chatArea__form').submit(function(e){
-               
-                e.preventDefault(); 
-                let time  = `${new Date().getHours()}:${new Date().getMinutes()}`;
-                let inputedMsg = document.querySelector('.chatArea__inputMsg');
-                socket.emit('chat message', inputedMsg.value,time);
-                inputedMsg.value = '';
-                return false;
-               
-            });
-            $('.auth__form').submit(function(e){
-                e.preventDefault();
-                socket.emit('new user', userName.value,function(data){
-                   console.log(userName.value);
-                    if(data){
-                        $('.auth').hide();
-                        $('.chatArea').show(); 
-                    }
-                });
-            })
-            socket.on('new message', function(msg,){
-                $('.chatArea__message-list').append(`<li class="chatArea__message-item"><strong>${msg.user} </strong>  ${msg.data} : ${msg.time}</li>`);
-            });
-            socket.on('getUsers',function(usersData){
-                console.log(usersData);
-                var html = '';
-                for( var i=0; i<usersData.length; i++){
-                    html+=`<li>${usersData[i]}</li>`;
-                }
-                console.log(html);
-                $users.html(html);
-            })
-        })
-      </script>
+  <script src="./index.js"></script>
 </html>
