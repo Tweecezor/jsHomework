@@ -1,12 +1,12 @@
 var app = require('express')();
 var http = require('http').createServer(app);
-var io = require('socket.io')(http,{
-    cookie:true
-});
+var io = require('socket.io')(http);
 
 var usersNames = [];
 var connections = [];
 var usersDataBase = [];
+var history = [];
+var currentUserNickname;
 
 http.listen(3000, function(){
     console.log('listening on *:3000');
@@ -16,76 +16,130 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/public/index.html');
 });
 
-
 app.get('/index.js', function(req, res){
     res.sendFile(__dirname + '/public/index.js');
 });
 
 io.on('connection', function(socket){
-    // console.log(socket);
     connections.push(socket);
     console.log('%s user is connected',connections.length);
-    // console.log('users : '+usersNames);
-    // console.log(usersDataBase);
 
     socket.on('chat message',function(msg,time){
         console.log(`message: ${msg}`);
+        history.push({data:msg,time:time,user:socket.username});
         io.emit('new message', {data:msg,time:time,user:socket.username});
     })
+
     socket.on('disconnect', function(){
-        // users.splice(users.indexOf(socket.username),1);
+
+        io.emit('showWhoLeave',socket.username);
+        console.log("disconnect nickname = " + socket.userNickname);
+        // for(var i=0;i<usersDataBase.length;i++){
+        //     if(usersDataBase[i].nickname == socket.userNickname){
+        //         currentUserNickname = usersDataBase[i].nickname;
+        //     }
+        // }
+        // console.log('текущий ник ' + currentUserNickname);
+
         usersNames = usersNames.filter(function(item){
-            if(item != socket.username) return true;
+            // console.log(`${item} = ${socket.username}`);
+            // console.log(`${currentUserNickname} = ${socket.userNickname}`)
+            if(item.name == socket.username && item.nickname == socket.userNickname) {
+                console.log('delete')
+            } else{
+               console.log('оставить');
+               return item;          
+              }   
         })
+        console.log(usersNames);
+
         updateUserNames();
-        // connections.splice(connections.indexOf(socket),1);
+        
+
         connections = connections.filter(function(item){
             if(item!=socket) return true;
         })
-        io.emit('showWhoLeave',socket.username);
-        // console.log(socket.username);
+
         console.log(`Disconected:${socket.username} ;${connections.length} user connected`,);
+        
         // console.log(usersDataBase);
     });
 
-    socket.on("takeHistory",function(history,name){
+    // socket.on("takeHistory",function(history,name){
+    //     // console.log("takeHistory");
+    //     // console.log(history);
+    //     for(var i=0;i<usersDataBase.length;i++){
+    //         if(usersDataBase[i].name == name){
+    //             usersDataBase[i].history = history;
+    //         }
+    //     }
+    //     // console.log("DATABASE after added history");
+    //     // console.log(usersDataBase);
+    // })
+
+    // socket.on("takeAllHistory",function(allHistory){
+    //     console.log(history);
+    //    history.push(allHistory);
+    //    console.log(history);
+    //    count++;
+    //    console.log(count);
+    // })
+
+
+    socket.on('uploadImageToServer',function(src,userNickname){
         for(var i=0;i<usersDataBase.length;i++){
-            if(usersDataBase[i].name == name){
-                usersDataBase[i].history = history;
+            console.log(usersDataBase[i])
+            if(usersDataBase[i].nickname == userNickname){
+                usersDataBase[i].src = src;
             }
         }
+        // console.log(usersDataBase);
     })
 
+   
+
     socket.on('new user',function(data,user,callback){
-        console.log("-------start fn new user---------");
-        console.log('userDataBase before add new user')
+        // console.log("-------start fn new user---------");
+        // console.log('userDataBase before add new user')
         console.log(usersDataBase);
         var valide = true;
         if(usersDataBase.length == 0) {
             usersDataBase.push(user);
             socket.username = data;
-            usersNames.push(socket.username);
+            socket.userNickname = user.nickname;
+
+            usersNames.push({
+                name: socket.username,
+                nickname:socket.userNickname
+            });
             updateUserNames();
         } else{
             
             for(var i=0;i<usersDataBase.length;i++){
-                // console.log("item forn DATABASE")
-                // console.log(usersDataBase[i]);
                 if(usersDataBase[i].name == user.name && usersDataBase[i].nickname == user.nickname ){
-                    console.log('not first time visit');
-                    console.log("welcome again")
-                    console.log("-------before return fn---------");
+
                     callback(true);
                     socket.username = data;
-                    usersNames.push(socket.username);
+                    // usersNames.push(socket.username);
+                    socket.userNickname = user.nickname;
+                    usersNames.push({
+                        name: socket.username,
+                        nickname:socket.userNickname
+                    });
                     updateUserNames();
+                    console.log(usersDataBase[i]);
                     user = usersDataBase[i];
-                    console.log(user);
-                    io.emit("addHistory",user.history);
+
+
+                    io.emit("addHistory",history);
+                    io.emit("addAvatar",user.src,user.nickname);
                     i = usersDataBase.length;
                     valide = false;
-                } else if(usersDataBase[i].name == user.name && usersDataBase[i].nickname != user.nickname){
+                } else if(usersDataBase[i].name != user.name && usersDataBase[i].nickname == user.nickname){
                     console.log('этот ник уже занят. Введите другой')
+                    let errorText = "этот ник уже занят. Введите другой";
+                    callback(false);
+                    io.emit('showErrorAuthorization',errorText);
                     i = usersDataBase.length;
                     valide = false;
                 }
@@ -95,13 +149,13 @@ io.on('connection', function(socket){
             if(valide){
                 usersDataBase.push(user);
                 socket.username = data;
-                usersNames.push(socket.username);
+                socket.userNickname = user.nickname;
+                // usersNames.push(socket.username);
+                usersNames.push({
+                    name: socket.username,
+                    nickname:socket.userNickname
+                });
                 updateUserNames();
-                // console.log('DATABASE after added new user');
-                // console.log(usersDataBase);
-    
-               
-                console.log("-------end fn new user---------");
             }
             // console.log('firsst time visit');
            

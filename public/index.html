@@ -31,6 +31,13 @@
             background: grey;
             margin-right: 5px;;
         }
+        .sidebar__avatar-img{
+            max-width:100%;
+            object-fit: cover;
+            width:50px;
+            height: 50px;
+            border-radius: 50%;
+        }
         .main-content-wrap{
             width:78%;
             margin-left:2%;
@@ -82,6 +89,43 @@
         }
         .chatArea__message-item{
         }
+        .modal{
+            border:2px solid black;
+            width:40%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding:15px;
+            background: grey;
+            border-radius: 10px;
+        }
+
+        .modal-wrapper{
+            background: white;
+            border-radius: 10px;
+            padding-left:10px;
+            padding-bottom:10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-hide{
+            display: none;
+        }
+        .modal__upload-avatar-wrapper{
+            background: grey;
+            width:120px;
+            height: 120px;
+            border-radius: 10px;
+        }
+        .modal__upload-avatar{
+            width:120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit:cover;
+        }
     </style>
   </head>
   <script src="/socket.io/socket.io.js"></script>
@@ -95,6 +139,7 @@
                     <div class="sidebar__avatar">
                         <img src="" alt="" class="sidebar__avatar-img">
                     </div>
+                   
                     <div class="sidebar__text">Добро Пожаловать</div>
                 </div>
                 <div class="sidebar__members">
@@ -117,12 +162,27 @@
                 </div>
                 <div class="chatArea">
                     <ul class="chatArea__message-list">
-                        <li>fghjkl</li>
                     </ul>
                     <form action="" class="chatArea__form">
                         <input type="text" class="chatArea__inputMsg" placeholder="enter your message">
+                        
                         <button class="chatArea__btn">Отправить</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-hide">
+        <div class="modal-wrapper">
+            <h2 class="modal__header">Загрузка фото</h2>
+            <div class="modal__upload-area">
+                <div class="modal__upload-avatar-wrapper">
+                    <img src="" class="modal__upload-avatar" alt="">
+                </div>
+                <input type="file" class="loadImg">
+                <div class="modal__upload-controls">
+                        <button class="modal__upload">Загрузить</button>
+                        <button class="modal__reset">Отмена</button>
                 </div>
             </div>
         </div>
