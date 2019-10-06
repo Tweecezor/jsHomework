@@ -67,7 +67,25 @@ $(function(){
           modalImageUpload.classList.add('modal-hide');
         //   var currentUser = document.querySelector('.sidebar__text').innerHTML;
           socket.emit("uploadImageToServer",fileReader.result,currentNickname);
+          console.log(currentNickname);
+          socket.emit("updateAvatar",fileReader.result,currentNickname);
+          
+          modalAvatar.src = '';
     })
+    socket.on('uploadNewAvatar',function(src,nickname){
+        // updateAvatar(src);
+        var allCurrentUserMsgs = document.querySelectorAll(`[data-nickname="${nickname}"]`);
+        for(var i=0;i<allCurrentUserMsgs.length;i++){
+            allCurrentUserMsgs[i].src = src;
+        }
+    })
+
+    // function updateAvatar(src){
+    //     var allCurrentUserMsgs = document.querySelectorAll(`[data-nickname="${currentNickname}"]`);
+    //     for(var i=0;i<allCurrentUserMsgs.length;i++){
+    //         allCurrentUserMsgs[i].src = src;
+    //     }
+    // }
 
     fileReader.addEventListener('load',function(){
         // avatarImage.src = fileReader.result;
@@ -113,20 +131,42 @@ $(function(){
 
                 $('.sidebar__text').html(`${userName.value}`);
                 // console.log(user.history);
-                socket.on("addHistory",function(history){
-                    console.log(history);
+                socket.on("addHistory",function(history,userDataBase){
+                    // console.log(history);
+                    // var avatarSrc;
+                    // if(currentNickname == nickname){
+                    //     avatarSrc = src;
+                    // }
                     var tst = document.querySelector('.chatArea__message-list')
                     if(!tst.children.length){
+                        let avatarSrc;
+                        console.log(history);
                         for(var i=0;i<history.length;i++) {
                             let msg = history[i];
-                            var html = `<li class="chatArea__message-item">
-                            <div>
-                                <strong>${msg.user} </strong>${msg.time}
-                            </div>
-                            <div>
-                                ${msg.data}
-                            </div>
-                            </li>` 
+                            for(var j=0;j<userDataBase.length;j++){
+                                var user = userDataBase[j];
+                                if(user.nickname == msg.nickname){
+                                    avatarSrc = user.src;
+                                }
+                            }
+                            console.log(avatarSrc);
+                            if(!avatarSrc){
+                                avatarSrc = "./noPhoto.jpg";
+                            }
+                            console.log(avatarSrc);
+                            var html = `
+                                <li class="chatArea__message-item">
+                                    <div class="message-item">
+                                        <div class="img-wrap">
+                                            <img src="${avatarSrc}" alt="" class="avatar-img" data-nickname="${msg.nickname}">
+                                        </div>
+                                        <div class="message__text">
+                                                <span class="message__text-name">${msg.user}</span>
+                                                <span class="message__text-time">${msg.time}</span>
+                                                <div class="message__text-content">${msg.data}</div>
+                                            </div>
+                                        </div>
+                                </li>`
                             $('.chatArea__message-list').append(html);
                         }
                     }
@@ -140,7 +180,11 @@ $(function(){
 
                     // var currentUser = document.querySelector('.sidebar__text').innerHTML;
                     if(currentNickname == userNickame){
+                        if(src!=''){
+                            
+                        }
                         avatarImage.src = src;
+                        // document.querySelector('.avatar-img').src = src;
                     }
                 })
                 
@@ -187,18 +231,32 @@ $(function(){
         e.preventDefault(); 
         let time  = `${new Date().getHours()}:${new Date().getMinutes()}`;
         let inputedMsg = document.querySelector('.chatArea__inputMsg');
-        socket.emit('chat message', inputedMsg.value,time);
+        socket.emit('chat message', inputedMsg.value,time,currentNickname);
         inputedMsg.value = '';
     });
     socket.on('new message', function(msg,){
-        var html = `<li class="chatArea__message-item">
-        <div>
-            <strong>${msg.user} </strong>${msg.time}
-        </div>
-        <div>
-            ${msg.data}
-        </div>
-        </li>`
+        let avatarSrc;
+        if(msg.src){
+            console.log('some');
+            avatarSrc = msg.src;
+        } else{
+            console.log('empty');
+            avatarSrc = './noPhoto.jpg';
+        }
+        var html = `
+        <li class="chatArea__message-item">
+            <div class="message-item">
+                <div class="img-wrap">
+                    <img src="${avatarSrc}" alt="" class="avatar-img" data-nickname="${msg.nickname}">
+                </div>
+                <div class="message__text">
+                        <span class="message__text-name">${msg.user}</span>
+                        <span class="message__text-time">${msg.time}</span>
+                        <div class="message__text-content">${msg.data}</div>
+                    </div>
+                </div>
+        </li>
+        `
         $('.chatArea__message-list').append(html);
         // let msgData = {
         //     user:msg.user,

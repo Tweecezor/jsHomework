@@ -19,15 +19,24 @@ app.get('/', function(req, res){
 app.get('/index.js', function(req, res){
     res.sendFile(__dirname + '/public/index.js');
 });
+app.get('/noPhoto.jpg', function(req, res){
+    res.sendFile(__dirname + '/public/noPhoto.jpg');
+});
 
 io.on('connection', function(socket){
     connections.push(socket);
     console.log('%s user is connected',connections.length);
 
-    socket.on('chat message',function(msg,time){
+    socket.on('chat message',function(msg,time,currentUserNickname){
         console.log(`message: ${msg}`);
-        history.push({data:msg,time:time,user:socket.username});
-        io.emit('new message', {data:msg,time:time,user:socket.username});
+        history.push({data:msg,time:time,user:socket.username,nickname:currentUserNickname});
+        var userImage;
+        for(var i=0;i<usersDataBase.length;i++){
+            if(usersDataBase[i].nickname == currentUserNickname){
+                 userImage = usersDataBase[i].src;
+            }
+        }
+        io.emit('new message', {data:msg,time:time,user:socket.username,src:userImage,nickname:currentUserNickname});
     })
 
     socket.on('disconnect', function(){
@@ -131,7 +140,7 @@ io.on('connection', function(socket){
                     user = usersDataBase[i];
 
 
-                    io.emit("addHistory",history);
+                    io.emit("addHistory",history,usersDataBase);
                     io.emit("addAvatar",user.src,user.nickname);
                     i = usersDataBase.length;
                     valide = false;
@@ -179,6 +188,9 @@ io.on('connection', function(socket){
 
     socket.on('get all users',function(){
       updateUserNames();
+    })
+    socket.on("updateAvatar",function(src,nickname){
+        io.emit('uploadNewAvatar',src,nickname);
     })
 
    
