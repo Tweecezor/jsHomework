@@ -13,6 +13,39 @@ $(function(){
     var uploadImageButtonToServer = document.querySelector('.modal__upload');
     var imageSrc = '';
     var currentNickname;
+
+
+    var dropbox;
+
+    dropbox = document.querySelector(".modal__upload-avatar-wrapper");
+    dropbox.addEventListener("dragenter", dragenter, false);
+    dropbox.addEventListener("dragover", dragover, false);
+    dropbox.addEventListener("drop", drop, false);
+
+    function dragenter(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    
+    function dragover(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    function drop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        console.log(files);
+        fileReader.readAsDataURL(files[0]);
+        // handleFiles(files);
+    }
+
+
+
+
     const fileReader = new FileReader();
     socket.on('connect',(e)=>{
         socket.emit('get all users');
@@ -38,6 +71,7 @@ $(function(){
 
     fileReader.addEventListener('load',function(){
         // avatarImage.src = fileReader.result;
+        // console.log(fileReader);
         modalAvatar.src = fileReader.result;
         imageSrc = fileReader.result;
         // console.log(fileReader.result);
@@ -47,17 +81,18 @@ $(function(){
         // modalImageUpload.classList.add('modal-hide');
     })
 
-    avatarInput.addEventListener('change',function(e){
-        let [file] = e.target.files;
-        if( file ) {
-            if (file.size > 512*1024) {
-                alert('BIG');
-            } else {
-                fileReader.readAsDataURL(file);
-            }
-        }
+    // avatarInput.addEventListener('change',function(e){
+    //     let [file] = e.target.files;
+    //     console.log(file);
+    //     if( file ) {
+    //         if (file.size > 512*1024) {
+    //             alert('BIG');
+    //         } else {
+    //             fileReader.readAsDataURL(file);
+    //         }
+    //     }
 
-    })
+    // })
 
     //авторизация пользователя
     $('.auth__form').submit(function(e){
