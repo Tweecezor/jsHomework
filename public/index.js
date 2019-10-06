@@ -50,6 +50,7 @@ $(function(){
     socket.on('connect',(e)=>{
         socket.emit('get all users');
         $('.chatArea').hide(); 
+        // $('.sidebar__members').hide(); 
     })
 
     avatarWrap.addEventListener('click',(e)=>{
@@ -61,6 +62,23 @@ $(function(){
         modalImageUpload.classList.add('modal-hide');
         modalAvatar.src = '';
     })
+
+    userName.addEventListener('keydown',(e)=>{
+        userName.style.border = "2px solid grey";
+       
+    })
+    userNickName.addEventListener('keydown',(e)=>{
+        userNickName.style.border = "2px solid grey";
+    })
+
+    function validateAuth(){
+
+        if(userName.value == '' || userNickName== ''){
+            return false
+        } else{
+            return true;
+        }
+    }
 
     uploadImageButtonToServer.addEventListener("click",function(){
           avatarImage.src = fileReader.result;
@@ -115,115 +133,102 @@ $(function(){
     //авторизация пользователя
     $('.auth__form').submit(function(e){
         e.preventDefault();
-        let user = {
-            name:userName.value,
-            nickname : userNickName.value,
-            history: '',
-            src:''
-        }
-        currentNickname =  userNickName.value;
-        console.log(currentNickname);
-        socket.emit('new user', userName.value,user,function(data){
-            if(data){
-                currentNickname = user.nickname;
-                $('.auth').hide();
-                $('.chatArea').show(); 
-
-                $('.sidebar__text').html(`${userName.value}`);
-                // console.log(user.history);
-                socket.on("addHistory",function(history,userDataBase){
-                    // console.log(history);
-                    // var avatarSrc;
-                    // if(currentNickname == nickname){
-                    //     avatarSrc = src;
-                    // }
-                    var tst = document.querySelector('.chatArea__message-list')
-                    if(!tst.children.length){
-                        let avatarSrc;
-                        console.log(history);
-                        for(var i=0;i<history.length;i++) {
-                            let msg = history[i];
-                            for(var j=0;j<userDataBase.length;j++){
-                                var user = userDataBase[j];
-                                if(user.nickname == msg.nickname){
-                                    avatarSrc = user.src;
-                                }
-                            }
-                            console.log(avatarSrc);
-                            if(!avatarSrc){
-                                avatarSrc = "./noPhoto.jpg";
-                            }
-                            console.log(avatarSrc);
-                            var html = `
-                                <li class="chatArea__message-item">
-                                    <div class="message-item">
-                                        <div class="img-wrap">
-                                            <img src="${avatarSrc}" alt="" class="avatar-img" data-nickname="${msg.nickname}">
-                                        </div>
-                                        <div class="message__text">
-                                                <span class="message__text-name">${msg.user}</span>
-                                                <span class="message__text-time">${msg.time}</span>
-                                                <div class="message__text-content">${msg.data}</div>
-                                            </div>
-                                        </div>
-                                </li>`
-                            $('.chatArea__message-list').append(html);
-                        }
-                    }
-
-                })
-
-                socket.on("addAvatar",function(src,userNickame){
-                    // console.log(src);
-                    console.log("nickname"+userNickame);
-                    console.log("nickname"+currentNickname);
-
-                    // var currentUser = document.querySelector('.sidebar__text').innerHTML;
-                    if(currentNickname == userNickame){
-                        if(src!=''){
-                            
-                        }
-                        avatarImage.src = src;
-                        // document.querySelector('.avatar-img').src = src;
-                    }
-                })
-                
-            } else {
-                socket.on("showErrorAuthorization",function(errorText){
-                    userNickName.style.border = "2px solid red";
-                    // var error = document.createElement('div');
-                    // error.classList.add('error');
-                    // error.innerHTML = errorText;
-                    userNickName.placeholder = errorText;
-                    userNickName.value='';
-                    // error.insertAfter(userNickName);
-                    // alert(errorText);
-                })
+        if(validateAuth()){
+            $('.sidebar__members').show(); 
+            let user = {
+                name:userName.value,
+                nickname : userNickName.value,
+                history: '',
+                src:''
             }
-            // $('.sidebar__text').html(`${userName.value}`);
-            // // console.log(user.history);
-            // socket.on("addHistory",function(history){
-            //     console.log(history);
-            //     var tst = document.querySelector('.chatArea__message-list')
-            //     if(!tst.children.length){
-            //         for(var i=0;i<history.length;i++) {
-            //             let msg = history[i];
-            //             var html = `<li class="chatArea__message-item">
-            //             <div>
-            //                 <strong>${msg.user} </strong>${msg.time}
-            //             </div>
-            //             <div>
-            //                 ${msg.data}
-            //             </div>
-            //             </li>` 
-            //             $('.chatArea__message-list').append(html);
-            //         }
-            //     }
-            // })
-
-            
-           
-        });
+            currentNickname =  userNickName.value;
+            console.log(currentNickname);
+            socket.emit('new user', userName.value,user,function(data){
+                if(data){
+                    currentNickname = user.nickname;
+                    $('.auth').hide();
+                    $('.chatArea').show(); 
+    
+                    $('.sidebar__text').html(`${userName.value}`);
+                    // console.log(user.history);
+                    socket.on("addHistory",function(history,userDataBase){
+                        // console.log(history);
+                        // var avatarSrc;
+                        // if(currentNickname == nickname){
+                        //     avatarSrc = src;
+                        // }
+                        var tst = document.querySelector('.chatArea__message-list')
+                        if(!tst.children.length){
+                            let avatarSrc;
+                            console.log(history);
+                            for(var i=0;i<history.length;i++) {
+                                let msg = history[i];
+                                for(var j=0;j<userDataBase.length;j++){
+                                    var user = userDataBase[j];
+                                    if(user.nickname == msg.nickname){
+                                        avatarSrc = user.src;
+                                    }
+                                }
+                                console.log(avatarSrc);
+                                if(!avatarSrc){
+                                    avatarSrc = "./noPhoto.jpg";
+                                }
+                                console.log(avatarSrc);
+                                var html = `
+                                    <li class="chatArea__message-item">
+                                        <div class="message-item">
+                                            <div class="img-wrap">
+                                                <img src="${avatarSrc}" alt="" class="avatar-img" data-nickname="${msg.nickname}">
+                                            </div>
+                                            <div class="message__text">
+                                                    <span class="message__text-name">${msg.user}</span>
+                                                    <span class="message__text-time">${msg.time}</span>
+                                                    <div class="message__text-content">${msg.data}</div>
+                                                </div>
+                                            </div>
+                                    </li>`
+                                $('.chatArea__message-list').append(html);
+                            }
+                        }
+    
+                    })
+    
+                    socket.on("addAvatar",function(src,userNickame){
+                        // console.log(src);
+                        console.log("nickname"+userNickame);
+                        console.log("nickname"+currentNickname);
+    
+                        // var currentUser = document.querySelector('.sidebar__text').innerHTML;
+                        if(currentNickname == userNickame){
+                            if(src==''){
+                                avatarSrc = "./noPhoto.jpg";
+                            }else{
+                                avatarImage.src = src;
+                            }
+                           
+                            // document.querySelector('.avatar-img').src = src;
+                        }
+                    })
+                    
+                } else {
+                    socket.on("showErrorAuthorization",function(errorText){
+                        userNickName.style.border = "2px solid red";
+                        // var error = document.createElement('div');
+                        // error.classList.add('error');
+                        // error.innerHTML = errorText;
+                        userNickName.placeholder = errorText;
+                        userNickName.value='';
+                        // error.insertAfter(userNickName);
+                        // alert(errorText);
+                    })
+                }      
+            });
+        } else{
+            alert(" Заполните поля!");
+            userName.style.border = "2px solid red";
+            userNickName.style.border = "2px solid red";
+        }
+        
     })
 
     //вставка сообщения пользователя 
@@ -258,17 +263,7 @@ $(function(){
         </li>
         `
         $('.chatArea__message-list').append(html);
-        // let msgData = {
-        //     user:msg.user,
-        //     time:msg.time,
-        //     content: msg.data
-        // }
-        // let msgArea =  $('.chatArea__message-list').html();
-        // console.log(msgArea);
-        // socket.emit("takeHistory",msgArea,msg.user);
-      
-        // let msgArea =  $('.chatArea__message-list').html();
-        // console.log(msgArea);
+
     });
     // socket.emit("takeAllHistory",msgData);
 
@@ -288,6 +283,16 @@ $(function(){
 
     socket.on('showWhoLeave',function(whoLeaved){
         console.log(`${whoLeaved} leaved`);
+        var tst = document.querySelector('.chatArea__message-list')
+        if(whoLeaved && !tst){
+            var html = `
+        <li class="chatArea__message-item">
+            <div class="message-item">Пользователь <b> ${whoLeaved} </b> покинул чат</div>
+        </li>
+        `
+        $('.chatArea__message-list').append(html);
+        }
+        
     })
 })
 
