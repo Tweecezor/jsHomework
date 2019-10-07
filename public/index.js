@@ -77,7 +77,7 @@ $(function(){
 
     function validateAuth(){
 
-        if(userName.value == '' || userNickName== ''){
+        if(userName.value == '' || userNickName.value == ''){
             return false
         } else{
             return true;
@@ -193,6 +193,7 @@ $(function(){
                                             </div>
                                     </li>`
                                 $('.chatArea__message-list').append(html);
+                                document.querySelector('.chatArea__message-list').scrollTop =  document.querySelector('.chatArea__message-list').scrollHeight;
                             }
                         }
     
@@ -268,6 +269,7 @@ $(function(){
         </li>
         `
         $('.chatArea__message-list').append(html);
+        document.querySelector('.chatArea__message-list').scrollTop =  document.querySelector('.chatArea__message-list').scrollHeight;
 
 
     });
