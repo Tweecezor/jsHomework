@@ -14,11 +14,13 @@
         .sidebar-wrap{
             background-color: orange;
             width:20%;
+            color:white;
         }
         .sidebar{
           margin:10px;
            display: flex;
            flex-direction: column;
+          
         }
         .sidebar__text-wrapper{
             display: flex;
@@ -79,6 +81,7 @@
         }
         .sidebar__members{
             display: none;
+            color:white;
             
         }
         .members-list{
@@ -132,17 +135,21 @@
             display: none;
         }
         .modal__upload-avatar-wrapper{
-            background: grey;
+            /* background: grey; */
             width:120px;
             height: 120px;
             border-radius: 10px;
             margin-bottom:20px;
+            border:1px dashed grey;
+            position: relative;
         }
         .modal__upload-avatar{
             width:120px;
             height: 120px;
             border-radius: 10px;
             object-fit:cover;
+            z-index: 2;
+            position: relative;
 
         }
         .modal__upload-area{
@@ -177,6 +184,16 @@
         .message__text-name{
             font-weight: 700;
         }
+        .modal__upload-text{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+        .sidebar__text,
+        .sidebar__members-head{
+            font-weight: 700;
+        }
     </style>
   </head>
   <script src="/socket.io/socket.io.js"></script>
@@ -194,7 +211,9 @@
                     <div class="sidebar__text">Добро Пожаловать</div>
                 </div>
                 <div class="sidebar__members">
-                    <div class="sidebar__members-head">Участники</div>
+                    <div class="sidebar__members-head">Участники 
+                        (<span class="sidebar__members-count"></span>)
+                    </div>
                     <span class="sidebar__members-count"></span>
                     <ul class="members-list">
                     </ul>
@@ -228,6 +247,7 @@
             <h2 class="modal__header">Загрузка фото</h2>
             <div class="modal__upload-area">
                 <div class="modal__upload-avatar-wrapper">
+                    <span class="modal__upload-text">Перетащите сюда фото</span>
                     <img src="" class="modal__upload-avatar" alt="">
                 </div>
                 <!-- <input type="file" class="loadImg"> -->

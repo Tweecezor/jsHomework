@@ -70,6 +70,7 @@ io.on('connection', function(socket){
         })
 
         console.log(`Disconected:${socket.username} ;${connections.length} user connected`,);
+        updateOnlineUsers();
         
         // console.log(usersDataBase);
     });
@@ -121,6 +122,7 @@ io.on('connection', function(socket){
                 name: socket.username,
                 nickname:socket.userNickname
             });
+            updateOnlineUsers();
             updateUserNames();
         } else{
             
@@ -135,6 +137,7 @@ io.on('connection', function(socket){
                         name: socket.username,
                         nickname:socket.userNickname
                     });
+                    updateOnlineUsers();
                     updateUserNames();
                     console.log(usersDataBase[i]);
                     user = usersDataBase[i];
@@ -164,6 +167,7 @@ io.on('connection', function(socket){
                     name: socket.username,
                     nickname:socket.userNickname
                 });
+                updateOnlineUsers();
                 updateUserNames();
             }
             // console.log('firsst time visit');
@@ -174,16 +178,7 @@ io.on('connection', function(socket){
         } else{
             console.log('doesnt work');
         }
-      
 
-
-     
-       
-      
-        // usersDataBase.push(user);
-        // socket.username = data;
-        // usersNames.push(socket.username);
-        // updateUserNames();
     })
 
     socket.on('get all users',function(){
@@ -198,5 +193,9 @@ io.on('connection', function(socket){
 function updateUserNames(){
     // console.log(usersNames);
     io.emit('getUsers',usersNames,usersDataBase);
+}
+function updateOnlineUsers(){
+    console.log(`onlineUsers = ${usersNames.length}`);
+    io.emit("onlineUsers",usersNames.length);
 }
 

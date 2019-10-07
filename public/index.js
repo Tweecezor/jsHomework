@@ -14,6 +14,7 @@ $(function(){
     var imageSrc = '';
     var currentNickname;
 
+    const fileReader = new FileReader();
 
     var dropbox;
 
@@ -37,16 +38,19 @@ $(function(){
         e.preventDefault();
         
         var dt = e.dataTransfer;
-        var files = dt.files;
-        console.log(files);
-        fileReader.readAsDataURL(files[0]);
+        var [file] = dt.files;
+        console.log(file);
+        if(file.size > 512 * 1024 || file.type != 'image/jpeg'){
+            alert('Можно загуржать только .jpeg меньше 512кб')
+        } else{
+            fileReader.readAsDataURL(file);
+        }
         // handleFiles(files);
     }
 
 
 
 
-    const fileReader = new FileReader();
     socket.on('connect',(e)=>{
         socket.emit('get all users');
         $('.chatArea').hide(); 
@@ -81,6 +85,7 @@ $(function(){
     }
 
     uploadImageButtonToServer.addEventListener("click",function(){
+        console.log(fileReader.result);
           avatarImage.src = fileReader.result;
           modalImageUpload.classList.add('modal-hide');
         //   var currentUser = document.querySelector('.sidebar__text').innerHTML;
@@ -293,6 +298,11 @@ $(function(){
         $('.chatArea__message-list').append(html);
         }
         
+    })
+
+    socket.on('onlineUsers',function(count){
+        console.log(count);
+        document.querySelector('.sidebar__members-count').innerHTML = count;
     })
 })
 
