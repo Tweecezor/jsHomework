@@ -269,6 +269,7 @@ $(function(){
         `
         $('.chatArea__message-list').append(html);
 
+
     });
     // socket.emit("takeAllHistory",msgData);
 
