@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My Chat</title>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+        }
+        .wrapper{
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar-wrap{
+            background-color: #fa8457;
+            width:20%;
+            color:white;
+        }
+        .sidebar{
+          margin:10px;
+           display: flex;
+           flex-direction: column;
+          
+        }
+        .sidebar__text-wrapper{
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .sidebar__avatar{
+            width:50px;
+            height: 50px;
+            border-radius: 50%;
+            background: lightgrey;
+            margin-right: 5px;;
+        }
+        .sidebar__avatar-img{
+            max-width:100%;
+            object-fit: cover;
+            width:50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .main-content-wrap{
+            width:78%;
+            margin-left:2%;
+        }
+        .main-content{
+           margin:10px;
+           height: 90%;
+        }
+        .auth{
+            background: lightgrey;
+            padding: 20px 10px;
+            border-radius: 10px;
+            width: 400px;
+            margin: 0 auto;
+        }
+        .auth-head{
+            padding: 0;
+            margin:0;
+        }
+        .auth__form{
+            background: #fff;
+            padding:10px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+        }
+        input{
+            border-radius: 10px;
+            border:2px solid grey;
+            padding:5px;
+            margin-bottom:10px;
+        }
+        button{
+            background:#fa8457; 
+            border: none;
+            border-radius: 10px;
+            padding:5px
+        }
+        .auth__btn{
+            width:20%;
+           align-items: flex-end;
+        }
+        .sidebar__members{
+            display: none;
+            color:white;
+            
+        }
+        .members-list{
+            list-style: none;
+            margin: 0;
+        }
+        .sidebar__members-head{
+            margin-bottom: 15px;
+        }
+        .chatArea{
+            height: 100%;
+        }
+        .chatArea__inputMsg{
+            width:69%;
+        }
+        .chatArea__form{
+            position:fixed;
+            bottom:20px;
+            width:100%;
+        }
+        .chatArea__message-list{
+            list-style: none;
+            height: 100%;
+            overflow: auto;
+        }
+        .chatArea__message-item{
+            margin-bottom: 10px;
+        }
+        .chatArea__message-item:last-child{
+            margin-bottom: 0;
+        }
+        .modal{
+            border:2px solid black;
+            width:20%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding:15px;
+            background: lightgrey;
+            border-radius: 10px;
+        }
+
+        .modal-wrapper{
+            background: white;
+            border-radius: 10px;
+            padding-left:10px;
+            padding-bottom:10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-hide{
+            display: none;
+        }
+        .modal__upload-avatar-wrapper{
+            /* background: grey; */
+            width:120px;
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom:20px;
+            border:1px dashed lightgrey;
+            position: relative;
+        }
+        .modal__upload-avatar{
+            width:120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit:cover;
+            z-index: 2;
+            position: relative;
+
+        }
+        .modal__upload-area{
+            width: 100%;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+           
+        }
+        .modal__upload-controls{
+            width: 100%;
+            text-align: right;
+        }
+        .img-wrap{
+            width:50px;
+            height: 50px;
+            background: #000;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .avatar-img{
+            width:50px;
+            height: 50px;
+            background: #000;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .message-item{
+            display: flex;
+            align-items: center;
+        }
+        .message__text-name{
+            font-weight: 700;
+        }
+        .modal__upload-text{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+        .sidebar__text,
+        .sidebar__members-head{
+            font-weight: 700;
+        }
+        .chatArea__btn{
+            padding: 5px 15px;
+        }
+    </style>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+ 
+  <body>
+    <div class="wrapper">
+        <div class="sidebar-wrap">
+            <div class="sidebar">
+                <div class="sidebar__text-wrapper">
+                    <div class="sidebar__avatar">
+                        <img src="./noPhoto.jpg" alt="" class="sidebar__avatar-img">
+                    </div>
+                   
+                    <div class="sidebar__text">Добро Пожаловать</div>
+                </div>
+                <div class="sidebar__members">
+                    <div class="sidebar__members-head">Участники 
+                        (<span class="sidebar__members-count"></span>)
+                    </div>
+                    <span class="sidebar__members-count"></span>
+                    <ul class="members-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main-content-wrap">
+            <div class="main-content">
+                <div class="auth">
+                    <h2 class="auth-head">Авторизация</h2>
+                    <form action="" class="auth__form">
+                        <input type="text" class="name" placeholder="ФИО">
+                        <input type="text" class="nickname" placeholder="Ник">
+                        <button class="auth__btn">войти</button>
+                    </form>
+                </div>
+                <div class="chatArea">
+                    <ul class="chatArea__message-list">
+                       
+                    </ul>
+                    <form action="" class="chatArea__form">
+                        <input type="text" class="chatArea__inputMsg" placeholder="enter your message">
+                        <button class="chatArea__btn">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-hide">
+        <div class="modal-wrapper">
+            <h2 class="modal__header">Загрузка фото</h2>
+            <div class="modal__upload-area">
+                <div class="modal__upload-avatar-wrapper">
+                    <span class="modal__upload-text">Перетащите сюда фото</span>
+                    <img src="" class="modal__upload-avatar" alt="">
+                </div>
+                <!-- <input type="file" class="loadImg"> -->
+                <div class="modal__upload-controls">
+                        <button class="modal__upload">Загрузить</button>
+                        <button class="modal__reset">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+
+
+  <script src="./index.js"></script>
+</html>
