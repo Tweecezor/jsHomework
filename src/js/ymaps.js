@@ -22,25 +22,14 @@ function mapInit() {
         });
         
         function makeMark(coords,data){
-            // console.log(modalWrapper.innerHTML);
-            // var balloonModal = [];
-            // balloonModal[0] = document.querySelector('.modal-header__location').innerHTML;
-            // balloonModal[1] = document.querySelector('.modal-comments__wrapper').innerHTML;
-            // var balloonModal = modalWrapper.innerHTML;
-            // console.log(modal.style.cssText);
-            // modal.style.cssText = 'top:0px;left:0px;'
+
             var balloonModal = {
                 style:modal.style.cssText,
                 address:document.querySelector('.modal-header__location').innerHTML,
                 reviews:document.querySelector('.modal-comments__wrapper').innerHTML,
                 coords:coords
             }
-            // if (reviewsData[coords]) {
-            //     reviewsData[coords].push(balloonModal);
-            //   } else {
-            //     reviewsData[coords] = balloonModal;
-            //     reviewsData[coords].push(balloonModal);
-            //   }
+
               reviewsData[coords] = balloonModal;
             // console.log(typeof balloonModal);
 
@@ -107,12 +96,7 @@ function mapInit() {
 
    
                 clusterer.add(makeMark(coords,review));
-                // if (reviewsData[coords]) {
-                //     reviewsData[coords].push(review);
-                //   } else {
-                //     reviewsData[coords] = [];
-                //     reviewsData[coords].push(review);
-                //   }
+
                 clearInputs();
             }
            
@@ -219,9 +203,7 @@ function mapInit() {
         e.preventDefault();
     
         var props  = e.get('target').properties;
-        // console.log(e.get('target'));
-        // console.log(typeof e.get('target').getGeoObjects);
-        // console.log(e.get('target').state.get('activeObject'));
+
         if(typeof e.get('target').getGeoObjects != 'function') {
             var bContent = JSON.parse(props.get('balloonContent'));
             var currentCoords = e.get('coords');
@@ -229,15 +211,7 @@ function mapInit() {
             var position = e.get('position');
             console.log(position);
             var [left,top] = position;
-            // console.log ();
-    
-            // var newContent = 'sdgfdhfgj';
-            // props.set('balloonContent',newContent);
-    
-            // var bContent1 = props.get('balloonContent');
-            // console.log(bContent);
-            // var [address,reviews] = bContent.split(';');
-            // modal.style.cssText = bContent.style
+
             modal.style.top = `${top}px`;
             modal.style.left = `${left}px`
             document.querySelector('.modal-header__location').innerHTML = bContent.address;
@@ -250,8 +224,7 @@ function mapInit() {
         } else {
 
             var balloonLink = document.querySelector('.balloonLink');
-   
-            // console.log(e.get('target'));
+
            
         }
 
@@ -259,17 +232,10 @@ function mapInit() {
 
     document.addEventListener('click',(e)=>{
         var target = e.target;
-        // console.log(target);
         if( target.className=="balloon_address"){
-                // console.log(e.get('target'))
-                // console.log(e.get('coords'));
-         
-        //   console.log(reviewsData)
-        //   console.log(coords);
-        //   console.log(reviewsData[coords].reviews);
-        //   console.log(target.dataset.coords);
+
           var dataCoords = target.dataset.coords;
-        //   console.log(reviewsData[dataCoords].reviews);
+
           console.log(reviewsData[dataCoords].coords);
           console.log(reviewsData[dataCoords].address);
           address = reviewsData[dataCoords].address;
@@ -283,33 +249,8 @@ function mapInit() {
 
 
            modal.classList.add('modal-show');
-        //   console.log(target.parentNode);
 
-        // console.log(clusterer.getGeoObjects());
-        // var allGeoObjects = clusterer.getGeoObjects();
-        // document.querySelector('.modal-comments__wrapper').innerHTML = '';
-        // console.log(allGeoObjects[0].get('coords'));
-        // console.log(allGeoObjects[0].properties._data);
-        
-
-
-
-        // debugger;
-        // var previousReviewPos = allGeoObjects.length-1;
-        // for( var i = 1; i< allGeoObjects.length; i++) {
-        //     console.log(allGeoObjects[i].properties._data);
-        //     var bContent = JSON.parse(allGeoObjects[i].properties._data.balloonContent);
-        //     console.log(bContent);
-        //     console.log(bContent.reviews);
-        //     document.querySelector('.modal-comments__wrapper').innerHTML += bContent.reviews;
-        // }
-        // var bContent = JSON.parse(allGeoObjects[previousReviewPos].properties._data.balloonContent);
-        // document.querySelector('.modal-comments__wrapper').innerHTML = bContent.reviews;
-       
-       
-       
         } else {
-            // console.log('nononono')
         }
     })
 
@@ -334,28 +275,6 @@ function mapInit() {
       myMap.geoObjects.add(clusterer);
     
     });
-
-
-    // cluster.events.add('objectsaddtomap', function () {
-
-    //     // Получим данные о состоянии объекта внутри кластера.
-    //     var geoObjectState = cluster.getObjectState(myGeoObjects[1]);
-    //     // Проверяем, находится ли объект находится в видимой области карты.
-    //     if (geoObjectState.isShown) {
-    
-    //         // Если объект попадает в кластер, открываем балун кластера с нужным выбранным объектом.
-    //         if (geoObjectState.isClustered) {
-    //             geoObjectState.cluster.state.set('activeObject', myGeoObjects[1]);
-    //             geoObjectState.cluster.balloon.open();
-    
-    //         } else {
-    //             // Если объект не попал в кластер, открываем его собственный балун.
-    //             myGeoObjects[1].balloon.open();
-    //         }
-    //     }
-    
-    // });
-
    
 }
 
